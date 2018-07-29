@@ -1,18 +1,16 @@
-var express = require('express');
-var app = express();
-var socketio = require('socket.io');
-var http = require('http');
-var fs = require('fs');
+module.exports = function(io){
+    var app = require('express');
+    var router = app.Router();
 
-app.set('port', 3000);
-var server = http.createServer(app).listen(app.get('port'), function () {
-  console.log("express server listening on port" + app.get('port'));
-});
-
-var io = socketio.listen(server);
-
-io.sockets.on('connection', function (socket) {
-  socket.on('message', function (message) {
-    io.sockets.emit('message', message);
-  });
-});
+    io.sockets.on('connection', function (socket) {
+      socket.on('join:room', function(data){
+        console.log(data.roomId);
+        socket.join('room' + data.roomId);
+      });
+      socket.on('send:message', function (data) {
+        console.log(data.message);
+        io.sockets.in('room' + data.roomId).emit('send:message', data.message);
+      });
+    });
+    return router;
+}

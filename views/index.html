@@ -5,8 +5,11 @@
 </head>
 <body>
   <div id="button_set">
-    <button id="signin">LOGIN</button>
-    <button id="signup">SIGNUP</button>
+    <center>
+      <button id="signin"><div class="round"></div><p>LOGIN</p></button>
+      <button id="signup"><div class="round"></div><p>SIGNUP</p></button>
+    </center>
+
   </div>
   <div id="signin_form">
     <form action="/users/signin" method="post">
@@ -32,6 +35,32 @@ body {
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+}
+
+#button_set {
+    margin: auto;
+    width: 50%;
+    height: 100%;
+  text-align: center;
+
+}
+
+#button_set button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+#button_set button > .round {
+  display:block;
+  height: 120px;
+  width: 120px;
+  border: 1px solid red;
+  margin: 10px;
+  border-radius: 100%;
 }
 </style>
 <script>

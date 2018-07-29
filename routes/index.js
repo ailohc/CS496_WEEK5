@@ -14,4 +14,8 @@ router.get('/chat', function(req, res){
   res.render('chat')
 });
 
+router.get('/getInfo', function(req, res){
+  res.json({user: req.session.loginInfo.username})
+})
+
 module.exports = router;

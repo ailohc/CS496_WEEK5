@@ -12,14 +12,6 @@ router.get('/', function(req, res, next) {
 });
 
 
-router.get('/signin', function(req, res) {
-  res.render('signin')
-})
-
-router.get('/signup', function(req, res) {
-  res.render('signup');
-})
-
 /* GET users listing. */
 router.post('/signup', asyncMiddleware(async function(req, res, next) {
   let usernameRegex = /^[a-z0-9]+$/;
@@ -40,7 +32,7 @@ router.post('/signup', asyncMiddleware(async function(req, res, next) {
       code: 2
     });
   }
-  var ret = await db.SignUp(id, nickname, password);
+  var ret = await db.SignUp(id, password, nickname);
   console.log(ret)
   res.redirect('/users')
 }));
@@ -59,7 +51,7 @@ router.post('/signin', asyncMiddleware(async function(req, res, next) {
     return res.redirect('/')
       // RETURN SUCCESS
   } else {
-    return res.redirect('/users/signin')
+    return res.redirect('/users')
   }
 }))
 

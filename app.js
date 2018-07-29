@@ -4,12 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+var socket_io = require('socket.io');
 var session = require('express-session');var session
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
 var app = express();
+var socket_io    = require( "socket.io" );
+var io           = socket_io();
+app.io           = io;
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -30,13 +34,27 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
 
+var io = socket_io();
+app.io = io;
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+
+io.on( "connection", function( socket )
+{
+    console.log( "A user connected" );
+});
+
+var chatRouter = require('./routes/chat')(io);
+
+app.use('/chat', chatRouter);
+
+
 
 // error handler
 app.use(function(err, req, res, next) {

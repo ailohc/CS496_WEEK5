@@ -5,7 +5,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="assets/css/main.css" />
+  <script src="./socket.io/socket.io.js"></script>
 </head>
 <body>
 
@@ -124,6 +124,23 @@
   </div>
   
   <script>
+
+  var socket = io.connect('http://52.231.67.203:4000');
+  var room_id = "";
+  var user_name = "";
+  window.addEventListener('DOMContentLoaded', function(){ 
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", './getInfo', true);
+    xhr.send(null);
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState == XMLHttpRequest.DONE) {
+        var resultJSON = xhr.response;
+        result_obj = JSON.parse(resultJSON);
+        user_name = result_obj.user;
+      }
+    }
+  });
+
   $( "form" ).submit(function( event ) {
     event.preventDefault();
   });
@@ -131,30 +148,54 @@
       let query = document.getElementById("TerminalQuery").value;
       //console.log(query);
       let node = document.createElement("li");
-      let textnode = document.createTextNode("apple-ui-MacBook-Pro:~ apple$"+query);
+      let textnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$"+query);
       node.appendChild(textnode);
       document.getElementById("TerminalList").appendChild(node);
       document.getElementById("TerminalQuery").value = "";
       let split_query = query.split(" ");
       if (split_query[0] === "ls") {
         let foldernode = document.createElement("li");
-        let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ apple$freshman sophomore junior senior all");
+        let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$freshman sophomore junior senior all");
         foldernode.appendChild(foldertextnode);
         document.getElementById("TerminalList").appendChild(foldernode);
       }
       if (split_query[0] === "vim") {
           console.log(split_query[1]);
+          room_id = split_query[1];
+          console.log(room_id);
+          socket.emit('join:room', {roomId: room_id});
+          //Post message to server that which channel user selected
           $('#myTerminal').modal('hide');
           $('#myChat').modal('show');
       }
-      
   }
-  function chat_submit() {
-      console.log(document.getElementById("ChatQuery").value);
-  }
+
+    $('#myChat').on('show.bs.modal', function () {
+    console.log("get chag");
+    socket.on('send:message', function (data) {
+    let chat_message = document.createElement("li");
+    let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+user_name+"$"+data);
+    chat_message.appendChild(chat_message_text);
+    document.getElementById("ChatList").appendChild(chat_message);
+    });
+  // Get message from server, put the message list on chatlist
+})
   
+  function chat_submit() {
+      let chat_query = document.getElementById("ChatQuery").value;
+      console.log(document.getElementById("ChatQuery").value);
+      if (chat_query === ':wq') {
+        $('#myTerminal').modal('show');
+        $('#myChat').modal('hide');
+      }
+      socket.emit('send:message', {roomId: room_id, message: chat_query});
+      document.getElementById("ChatQuery").value = "";
+  }
+
+
   </script>
   </body>
+
 <style>
 body {
   background : url("/images/background.jpg") no-repeat center center fixed;
@@ -163,5 +204,34 @@ body {
   -o-background-size: cover;
   background-size: cover;
 }
+ul.TerminalContents, ul.ChatContents {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'monaco';
+}
+#TerminalQuery, #ChatQuery {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.modal-useful, .modal-chat {
+    font-family: 'monaco';
+}
+
+.button {
+    font-family: 'sambong';
+}
+
+@font-face {
+    font-family: 'monaco';
+    src: url('monaco-webfont.ttf') format('truetype'),
+        url('monaco-webfont.woff') format('woff');
+    font-family: 'sambong';
+    src: url('sambongfont.ttf') format('truetype'),
+        url('sambongfont.woff') format('woff');
+}
 </style>
+
 </html>

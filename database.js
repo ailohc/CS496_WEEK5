@@ -38,6 +38,7 @@ let SignIn = (username, password) => {
         if(result.length) {
           bcrypt.compare(password, result[0].password, function(err, res){
             if(res){
+              console.log("SignIn Success")
               resolve({ 'id' : result[0].id });
             } else {
               resolve( {'message' : 'Your password is incorrect'});
