@@ -1,0 +1,31 @@
+<html>
+<head>
+  <title>CHAT</title>
+</head>
+<body>
+  <div>
+    <div style="width: 300px; height: 300px; border: solid 1px;" id="txtarea">
+      <dl id="txtappend"></dl>
+    </div>
+    <input type="text" name="message" id="message"/>
+    <input type="button" value="Enter" id="btn"/>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+  <script src="http://code.jquery.com/jquery-1.7.1.js"></script>
+  <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+  <script>
+  $(document).ready(function() {
+    var socket = io.connect('http://52.231.67.203:3000');
+    $('#btn').click(function () {
+      var message = $('#message').val();
+      socket.emit('message', message);
+    });
+    socket.on('message', function (data) {
+      $('#txtappend').append('<dd style="margin:0px;">' + data + '</dd>');
+      $('#txt').val('');
+    });
+  });
+  </script>
+</body>
+
+</html>

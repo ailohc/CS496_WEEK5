@@ -1,0 +1,51 @@
+<html>
+<head>
+  <title>GOOGLE</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+  <div id="button_set">
+    <button id="signin">LOGIN</button>
+    <button id="signup">SIGNUP</button>
+  </div>
+  <div id="signin_form">
+    <form action="/users/signin" method="post">
+      <input type="text" placeholder="아이디" name="id"/>
+      <input type="password" placeholder="패스워드" name="password" />
+      <button type="submit">완료!</button>
+    </form>
+  </div>
+  <div id="signup_form">
+    <form action="/users/signup" method="post">
+      <div><input type="text" name="id" placeholder="아이디" /></div>
+      <div><input type="text" name="nickname" placeholder="닉네임" /></div>
+      <div><input type="password" name="password" placeholder="비밀번호" /></div>
+      <div><input type="password" name="pw_confirm" placeholder="비밀번호확인" /></div>
+      <button type="submit">Sign Up</button>
+    </form>
+  </div>
+</body>
+<style>
+body {
+  background : url("/images/background_blur.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+</style>
+<script>
+$('#signin_form').toggle();
+$('#signup_form').toggle();
+$('#signin').click(function(e) {
+  e.preventDefault();
+  $('#signin_form').toggle();
+  $('#button_set').toggle();
+});
+$('#signup').click(function(e) {
+  e.preventDefault();
+  $('#signup_form').toggle();
+  $('#button_set').toggle();
+});
+</script>
+</html>
