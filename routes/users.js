@@ -38,6 +38,7 @@ router.post('/signup', asyncMiddleware(async function(req, res, next) {
 }));
 
 router.post('/signin', asyncMiddleware(async function(req, res, next) {
+  console.log(req.body);
   var username = req.body.id;
   var password = req.body.password;
   var id = (await db.SignIn(username, password)).result.id;
@@ -48,10 +49,10 @@ router.post('/signin', asyncMiddleware(async function(req, res, next) {
       _id: id,
       username: username
     }
-    return res.redirect('/')
+    return res.json({ success: true })
       // RETURN SUCCESS
   } else {
-    return res.redirect('/users')
+  return res.json({ success: false })
   }
 }))
 

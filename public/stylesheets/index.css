@@ -1,0 +1,131 @@
+
+body {
+  background : url("/images/background_blur.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+#button_set, #signin_form, #signup_form {
+    margin: auto;
+    width: 50%;
+    height: 100%;
+}
+
+center {
+  position: relative;
+  top: 40%;
+  transform: translateY(-50%);
+}
+
+#button_set button {
+    background-color: Transparent;
+    background-repeat:no-repeat;
+    border: none;
+    cursor:pointer;
+    overflow: hidden;
+    outline:none;
+}
+
+.round {
+  display:block;
+  height: 100px;
+  width: 100px;
+  border: 0.1px solid #a7a1a1;
+  border-radius: 100%;
+}
+
+#button_set #signin {
+  margin-right:35px;
+}
+
+#button_set #signup {
+  margin-left:35px;
+}
+
+#login_round {
+  content : url("/images/user_circle.jpg")
+}
+#signup_round{
+    content : url("/images/no_user_circle.jpg")
+}
+
+.text {
+  font-family : 'sambong';
+  font-size : 1.0em;
+  color: white;
+
+}
+
+input {
+	width: 170px;
+  height: 30px;
+	display: inline-block;
+	color: rgb(255, 255, 255);
+	background-color: rgba(99,99,99,0.3);
+	padding: .5em .7em;
+	border: none;
+	cursor: pointer;
+	outline: none;
+  font-
+	-webkit-border-radius: 7px;
+	-moz-border-radius: 7px;
+	border-radius: 7px;
+	-webkit-transition: all .1s linear;
+	-moz-transition: all .1s linear;
+   /*opacity: 0.3;*/
+  /* filter: alpha(opacity=30);*/ /* For IE8 and earlier */
+}
+::placeholder {
+  color : white;
+  opacity: 0.3;
+}
+
+.id_input {
+  margin-bottom: 5px;
+}
+
+.pw_input {
+  margin-top: 5px;
+}
+.else_input {
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.input_form {
+  width: 260px;
+}
+
+.input_form .left_button {
+  float:left;
+  width:13%;
+}
+
+.input_form .center_input {
+  float:left;
+  width:74%;
+}
+
+.input_form .right_button{
+  float:left;
+  width:13%;
+}
+
+#login_button {
+  padding-top: 41px;
+}
+
+#signup_button {
+  padding-top: 124px;
+}
+.error_message{
+  color: white;
+  font-size: 12px;
+}
+@font-face {
+    font-family: 'sambong';
+    src: url('/stylesheets/sambongfont.ttf') format('truetype'),
+        url('/stylesheets/sambongfont.woff') format('woff');
+}

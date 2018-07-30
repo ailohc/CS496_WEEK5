@@ -59,3 +59,58 @@ exports.SignIn = async function Signin_(username, password) {
   })
   return { 'result' : result };
 }
+
+let LoadBoard = (board_id) => {
+  return new Promise((resolve, reject) => {
+    var q = 'SELECT * FROM  contents WHERE board_id=\"' + board_id + '\";'
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.length) {
+          resolve(result);
+        }
+        else {
+          resolve({'message' : 'No contents in this board'});
+        }
+      }
+    })
+  })
+}
+
+exports.LoadBoard = async function LoadBoard_(board_id) {
+  var result;
+  await LoadBoard(board_id).then(function(data) {
+    result = data;
+  })
+  return {'result' : result};
+}
+
+let LoadBoardSearch = (board_id, keyword) => {
+  return new Promise((resolve, reject) => {
+    var q = "SELECT * FROM contents NATURAL JOIN tag WHERE title LIKE '%" + keyword + "%' OR tag_text like '%" + keyword + "%'"
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.length) {
+          resolve(result);
+        }
+        else {
+          console.log('amazing');
+          resolve({'message' : 'No contents in this board with keyword'});
+        }
+      }
+    })
+  })
+}
+
+exports.LoadBoardSearch = async function LoadBoardSearch_(board_id, keyword) {
+  var result;
+  await LoadBoardSearch(board_id, keyword).then(function(data) {
+    result = data;
+  })
+  return {'result' : result};
+}

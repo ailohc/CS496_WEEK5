@@ -1,80 +1,83 @@
 <html>
 <head>
   <title>GOOGLE</title>
+  <link rel="stylesheet" href="/stylesheets/index.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="/javascripts/index.js"></script>
 </head>
 <body>
   <div id="button_set">
     <center>
-      <button id="signin"><div class="round"></div><p>LOGIN</p></button>
-      <button id="signup"><div class="round"></div><p>SIGNUP</p></button>
+      <button id="signin"><div id="login_round" class="round"></div><p class="text">로그인</p></button>
+      <span></span>
+      <button id="signup"><div id="signup_round" class="round"></div><p class="text">회원가입</p></button>
     </center>
 
   </div>
   <div id="signin_form">
-    <form action="/users/signin" method="post">
-      <input type="text" placeholder="아이디" name="id"/>
-      <input type="password" placeholder="패스워드" name="password" />
-      <button type="submit">완료!</button>
-    </form>
+    <center>
+      <div class="round" id="login_round"></div>
+      <p class="text">웰컴 카이스트</p>
+      <form id="login" action="/users/signin" method="post">
+        <div class="input_form">
+          <div class="left_button">
+            <button type="button" id="login_back_button" style="border: 0; background: transparent">
+              <img src="/images/circle_left.png" width="23" height="23" alt="submit" />
+            </button>
+          </div>
+          <div class="center_input">
+            <div>
+              <input id="input5" class="id_input input1" type="text" placeholder="아이디 입력"  autocomplete="off" name="id"/>
+            </div>
+            <div>
+              <input ID="input6" class="pw_input input1" type="password" placeholder="암호 입력"  autocomplete="off" name="password" />
+            </div>
+            <p class="error_message">
+              아이디 혹은 비밀번호가 잘못되었거나, 없는 계정입니다.
+            </p>
+          </div>
+          <div id="login_button" class="right_button">
+            <button type="button" style="border: 0; background: transparent">
+              <img src="/images/circle_right.png" width="23" height="23" alt="submit" />
+            </button>
+          </div>
+        </div>
+      </form>
+    </center>
   </div>
   <div id="signup_form">
-    <form action="/users/signup" method="post">
-      <div><input type="text" name="id" placeholder="아이디" /></div>
-      <div><input type="text" name="nickname" placeholder="닉네임" /></div>
-      <div><input type="password" name="password" placeholder="비밀번호" /></div>
-      <div><input type="password" name="pw_confirm" placeholder="비밀번호확인" /></div>
-      <button type="submit">Sign Up</button>
-    </form>
+    <center>
+      <div class="round" id="signup_round"></div>
+      <p class="text">웰컴 카이스트</p>
+      <form id="signup" action="/users/signup" method="post">
+        <div class="input_form">
+          <div class="left_button">
+            <button type="button" id="signup_back_button" style="border: 0; background: transparent">
+              <img src="/images/circle_left.png" width="23" height="23" alt="submit" />
+            </button>
+          </div>
+          <div class="center_input">
+            <div>
+              <input id="input1" class="id_input input2" type="text" name="id" placeholder="아이디 입력"  autocomplete="off"/>
+            </div>
+            <div>
+              <input id="input2" class="else_input input2" type="text" name="nickname" placeholder="닉네임 입력"  autocomplete="off"/>
+            </div>
+            <div>
+              <input id="input3" class="else_input input2" type="password" name="password" placeholder="비밀번호 입력"  autocomplete="off"/>
+            </div>
+            <div>
+              <input id="input4" class="pw_input input2" type="password" name="pw_confirm" placeholder="비밀번호확인 입력"  autocomplete="off" />
+            </div>
+          </div>
+          <div id="signup_button" class="right_button">
+            <button type="submit" style="border: 0; background: transparent">
+              <img src="/images/circle_right.png" width="23" height="23" alt="submit" />
+            </button>
+          </div>
+        </div>
+      </form>
+    </center>
   </div>
 </body>
-<style>
-body {
-  background : url("/images/background_blur.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-
-#button_set {
-    margin: auto;
-    width: 50%;
-    height: 100%;
-  text-align: center;
-
-}
-
-#button_set button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-}
-
-#button_set button > .round {
-  display:block;
-  height: 120px;
-  width: 120px;
-  border: 1px solid red;
-  margin: 10px;
-  border-radius: 100%;
-}
-</style>
-<script>
-$('#signin_form').toggle();
-$('#signup_form').toggle();
-$('#signin').click(function(e) {
-  e.preventDefault();
-  $('#signin_form').toggle();
-  $('#button_set').toggle();
-});
-$('#signup').click(function(e) {
-  e.preventDefault();
-  $('#signup_form').toggle();
-  $('#button_set').toggle();
-});
-</script>
 </html>
