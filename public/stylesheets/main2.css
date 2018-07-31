@@ -389,3 +389,7 @@ ul.TerminalContents, ul.ChatContents {
   border-top: 0px;
 	font-size: 13px;
 }
+
+.folder {
+	position: absoulte;
+}

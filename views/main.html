@@ -64,22 +64,24 @@
       <a href="#">yeon suk choi 로그아웃...</a>
     </div>
   </div>
-    <button id="freeBoard_btn" type="button" style="border: 0; background: transparent">
+  <div>
+    <button class="ui-draggable folder" id="freeBoard_btn" type="button" style="border: 0; background: transparent">
       <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
       <p>자유게시판</p>
     </button>
 
-    <button id="question_btn" type="button" style="border: 0; background: transparent">
+    <button class="ui-draggable folder" id="question_btn" type="button" style="border: 0; background: transparent">
       <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
       <p>질문게시판</p>
     </button>
 
-    <button id="anonymous_btn" type="button" style="border: 0; background: transparent">
+    <button class="ui-draggable folder" id="anonymous_btn" type="button" style="border: 0; background: transparent">
       <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
       <p>익명게시판</p>
     </button>
     <button id="terminal_btn" type="button" class="btn btn-info btn-lg" >터미널</button>
     <button id="xiri_btn" class="btn btn-info btn-lg" >Xiri</button>
+  </div>
   <!--FreeBoard-->
   <div id="freeBoard_div" class="window project ui-draggable windows-vis">
     <nav class="control-window">
@@ -87,6 +89,8 @@
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
+
+
     <div class="noticetitleInside">
       <p>TWOSOMEPLACE</p>
       <div style="text-align:right; margin-right: 10px">
@@ -98,7 +102,7 @@
     </div>
     <div class="container">
       <div class="container-inside">
-        <table>
+        <table class="table table-striped">
           <thead>
             <tr>
               <th>제목</th>
@@ -198,7 +202,7 @@
       </div>
     </div>
   </div>
-  
+
   <!--question div-->
 
   <div id="question_div" class="window project ui-dragable windows-vis">
@@ -397,7 +401,7 @@
   </div>
 
   <!--Xiri-->
-  
+
   <div id="xiri_div" class="window project ui-draggable windows-vis">
     <nav class="control-window">
       <a href="#" class="deactive close_btn">"deactive:"</a>
@@ -440,6 +444,7 @@
         <img class="bottom_icon" src="/images/numbers.png" width="70" height="70" />
         <img class="bottom_icon" src="/images/keynote.png" width="70" height="70" />
         <img class="bottom_icon" src="/images/setting.png" width="70" height="70" />
+        <button id="terminal_btn"
         <img id="terminal_" class="bottom_icon" src="/images/terminal.png" width="70" height="70" />
         <img class="bottom_icon" src="/images/calculator.png" width="70" height="70" />
         <img class="bottom_icon" src="/images/appstore.png" width="70" height="70" />
@@ -447,5 +452,9 @@
     </div>
   </div>
   </body>
+  <script>
+  $('.folder').draggable();
+
+  </script>
 
 </html>

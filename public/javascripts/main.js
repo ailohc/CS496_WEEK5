@@ -182,7 +182,7 @@ function show_freeboard () {
   
 
     function show_questioncomments() {
-      document.getElementById("questionCommentsList").innerHTML = "";
+      document.getElementById("QuestionCommentsList").innerHTML = "";
       var dataJSON = {contents_id : question_id};
       var data = JSON.stringify(dataJSON);
       var xmlHttp1 = new XMLHttpRequest();
@@ -199,9 +199,9 @@ function show_freeboard () {
             var comment_date_string = result[i].created_at.split("T");
             var comment_date = comment_date_string[0];
             var li = document.createElement("div");
-            li.className = "questionCommentsElement"
-            li.innerHTML = "<span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+"</span> - <span id = 'questionCommentText' class = 'questionCommentText'>"+comment_text+"</span> - <span id = 'questionCommentUser' class = 'questionCommentUser'>"+comment_user+"</span><span id = 'questionCommentDate' class = 'questionCommentDate'>"+comment_date+"</span><button id= 'questionCommentDelete' class = 'questionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
-            document.getElementById("questionCommentsList").appendChild(li);
+            li.className = "QuestionCommentsList"
+            li.innerHTML = "<span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+"</span> - <span id = 'QuestionCommentText' class = 'QuestionCommentText'>"+comment_text+"</span> - <span id = 'QuestionCommentUser' class = 'QuestionCommentUser'>"+comment_user+"</span><span id = 'QuestionCommentDate' class = 'QuestionCommentDate'>"+comment_date+"</span><button id= 'QuestionCommentDelete' class = 'QuestionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
+            document.getElementById("QuestionCommentsList").appendChild(li);
           }
         }
       }
@@ -926,7 +926,7 @@ function detail2(elem_id2) {
     }
     show_question_side();
   }
-  //show_questioncomments();
+  show_questioncomments();
 }
 
 function delete_question() {
@@ -946,7 +946,7 @@ function delete_question() {
       //$('#questionBoard_detail_div').hide();
       show_question();
       show_question_side();
-      //show_questioncomments();
+      show_questioncomments();
     } else {
       alert("Failed To Delete!");
     }
@@ -986,7 +986,7 @@ function send_question_modify () {
       document.question_tags.question_tags.value ="";
       show_question_side();
       show_question();
-      //show_questioncomments();
+      show_questioncomments();
     } else {
       alert("Failed To Edit!");
     }
@@ -1003,6 +1003,26 @@ function send_question_comment () {
   xhr1.send(data);
   document.getElementById("question_comments").value = "";
   document.getElementById("question_comments_title").value = "";
-  //show_questioncomments();
+  show_questioncomments();
 }
 
+function Delete_question_comments(comment_id2) {
+  var dataJSON = {"comment_id" : comment_id2, "user_id" : user_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/comments/prob/delete", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+    document.getElementById("question_comments").value = "";
+    document.getElementById("question_comments_title").value = "";
+    var resultJSON = xhr1.response;
+    result_obj = JSON.parse(resultJSON);
+    show_questioncomments() 
+    $('#questionBoard_detail_div').hide();
+    $('#questionBoard_detail_div').show();
+    //show_questioncomments() 
+  }
+}
+}

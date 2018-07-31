@@ -4,6 +4,7 @@ var user_name = "";
 var user_id = "";
 var board = "";
 var free_id = "";
+var anom_id = "";
 
 function printClock() {
   var seoul = moment().tz("Asia/Seoul");
@@ -193,20 +194,46 @@ function show_freeboard () {
         var result = JSON.parse(xmlHttp3.responseText);
         document.getElementById("detail-list-area-anom").innerHTML = "";
         for (var i in result) {
-          var elem_id1 = result[i].id;
+          var elem_id3 = result[i].id;
           var title = result[i].title;
-          var writer = result[i].nickname;
+          var writer = result[i].user_name;
           var string_data = result[i].created_at.split("T");
           var date = string_data[0];
           var tag = result[i].tag_text;
-          var obj = document.getElementById("detail-list-area");
+          var obj = document.getElementById("detail-list-area-anom");
           var divAppend = document.createElement("div");
-          divAppend.className = "detail-list-item";
-          divAppend.innerHTML = "<p onclick = 'detail1("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          divAppend.className = "detail-list-item-anom";
+          divAppend.innerHTML = "<p onclick = 'detail3("+elem_id3+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
           obj.appendChild(divAppend);
         }
       }
     }
+  }
+
+  function show_anomcomments() {
+    document.getElementById("AnomCommentsList").innerHTML = "";
+    var dataJSON = {contents_id : anom_id};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "board/comments/anonym/load", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
+        for (var i in result) {
+          var comment_id3 = result[i].id;
+          var comment_user = result[i].user_name;
+          var comment_text = result[i].comment_text;
+          var comment_date_string = result[i].created_at.split("T");
+          var comment_date = comment_date_string[0];
+          var li = document.createElement("div");
+          li.className = "AnomCommentsElement"
+          li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'Delete_anom_comments("+comment_id3+");'>삭제</button>";
+          document.getElementById("FreeCommentsList").appendChild(li);
+        }
+      }
+    }
+    xmlHttp1.send(data);
   }
 
 window.onload = function() {
