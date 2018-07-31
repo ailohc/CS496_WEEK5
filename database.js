@@ -200,7 +200,7 @@ exports.newContent = async function newContent_(board_id, user_id, title, conten
 
 let newAnonymContent = (board_id, user_name, title, contents_text, password, tag_text) => {
   return new Promise((resolve, reject) => {
-    var q = 'INSERT INTO anonym_contents (board_id, user_name, title, contents_text, created_at, password, tag_text) values (' + board_id + ', \"' + user_name + '\", \"' + title + '\", \"' + contents_text + '\", \"' + password + '\", \"' + tag_text + '\");'
+    var q = 'INSERT INTO anonym_contents (board_id, user_name, title, contents_text, created_at, password, tag_text) values (' + board_id + ', \"' + user_name + '\", \"' + title + '\", \"' + contents_text + '\", NOW(), \"' + password + '\", \"' + tag_text + '\");'
     connection.query(q, function(err, result) {
       if (err) {
         console.error(err);
@@ -310,7 +310,7 @@ exports.pwConfirm = async function pwConfirm_(password, contents_id) {
 
 let editAnonymContent = (contents_id, password, title, contents_text, tag_text) => {
   return new Promise((resolve, reject) => {
-    var q = 'UPDATE anoym_contents SET title=\"' + title + '\", contents_text=\"' + contents_text + '\", password=\"' + password + '\", tag_text=\"' + tag_text + '\", created_at=NOW() WHERE id=' + contents_id + ';'
+    var q = 'UPDATE anonym_contents SET title=\"' + title + '\", contents_text=\"' + contents_text + '\", password=\"' + password + '\", tag_text=\"' + tag_text + '\", created_at=NOW() WHERE id=' + contents_id + ';'
     connection.query(q, function(err, result) {
       if (err) {
         console.error(err);
@@ -337,7 +337,7 @@ exports.editAnonymContent = async function editAnonymContent_(contents_id, passw
 
 let deleteAnonymContent = (contents_id) => {
   return new Promise((resolve, reject) => {
-    var q = 'DELETE FROM anonym_contents WHERE contents_id=' + contents_id + ';'
+    var q = 'DELETE FROM anonym_contents WHERE id=' + contents_id + ';'
     connection.query(q, function(err, result) {
       if (err) {
         console.error(err);

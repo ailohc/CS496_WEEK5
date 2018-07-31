@@ -1055,6 +1055,6 @@ function Delete_anom_comments(comment_id3) {
       $('#anomBoard_detail_div').hide();
       $('#anomBoard_detail_div').show();
       show_anom_side();
-    }
+  }
   }
 }

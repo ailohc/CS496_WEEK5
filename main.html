@@ -376,7 +376,7 @@
         <form name = "anom_nickname_form"><textarea placeholder="이름 입력" rows = "1" id="anom_nickname" name = "anom_nickname"></textarea></form>
         <form name = "anom_contents_form"><textarea placeholder="내용 입력" rows = "5" id="anom_contents" name ="anom_contents"></textarea></form>
         <form name = "anomtags"><textarea placeholder="태그 입력" rows = "1" id="anom_tags" name ="anom_tags"></textarea></form>
-        <form name = "anompw"><textarea placeholder="비밀번호 입력" rows = "1" id="anom_pw" name = "anom_pw"></textarea></form>
+        <form name = "anom_fpw"><textarea placeholder="비밀번호 입력" rows = "1" id="anom_pw" name = "anom_pw"></textarea></form>
         <button onclick = "send_anom_add();" >전송</button><button onclick = "send_anom_modify();" >수정</button>
       </div>
     </div>
@@ -392,7 +392,7 @@
     <div class="titleInside detail-top">
       <div>
         <button onclick = "modify_anom();">수정</button>
-        <button onclick = "delete_anom();">삭제</button>
+        <button onclick = "delete_free();">삭제</button>
         <input/>
         <span style="margin-right:10px">>>  </span>
       </div>
@@ -423,9 +423,7 @@
             <div style="text-align:center">
               <span>
                   <form name = "anom_comment">
-                    <textarea id="anom_username" name = "anom_username" placeholder="작성자" style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
-                    <textarea id="anom_comments" name = "anom_comments" placeholder="댓글" style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
-                    <textarea id="anom_password" name = "anom_password" placeholder="비밀번호" style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
+                    <textarea id="anom_comments" name = "anom_comments" placeholder="댓글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
                   </form>
                 <button onclick = "send_anom_comment();">미안</button>
               </span>

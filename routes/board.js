@@ -44,7 +44,7 @@ router.post('/contents', asyncMiddleware(async function(req, res, next) {
   res.json(ret);
 }));
 
-router.post('/contetns/anonym', asyncMiddleware(async function(req, res, next) {
+router.post('/contents/anonym', asyncMiddleware(async function(req, res, next) {
   var board_id = req.body.board_id;
   var user_name = req.body.user_name;
   var title = req.body.title;
