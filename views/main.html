@@ -64,17 +64,22 @@
       <a href="#">yeon suk choi 로그아웃...</a>
     </div>
   </div>
+    <button id="freeBoard_btn" type="button" style="border: 0; background: transparent">
+      <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
+      <p>자유게시판</p>
+    </button>
 
+    <button id="question_btn" type="button" style="border: 0; background: transparent">
+      <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
+      <p>질문게시판</p>
+    </button>
 
-  <div class="container">
-    <button id="freeBoard_btn" class="btn btn-info btn-lg" >자유게시판</button>
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2" data-backdrop="static" data-keyboard="false">질문게시판</button>
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3" data-backdrop="static" data-keyboard="false">익명게시판</button>
+    <button id="anonymous_btn" type="button" style="border: 0; background: transparent">
+      <img src="/images/mac_folder.png" width="80" height="80" alt="submit" />
+      <p>익명게시판</p>
+    </button>
     <button id="terminal_btn" type="button" class="btn btn-info btn-lg" >터미널</button>
     <button id="xiri_btn" class="btn btn-info btn-lg" >Xiri</button>
-
-  </div>
-
   <!--FreeBoard-->
   <div id="freeBoard_div" class="window project ui-draggable windows-vis">
     <nav class="control-window">
@@ -127,30 +132,103 @@
         내용
         <form name = "contents_form"><textarea rows = "5" id="free_contents" name ="free_contents"></textarea></form>
         <form name = "freetags"><textarea rows = "1" id="free_tags" name ="free_tags"></textarea></form>
-          <button onclick = "send_free_add();" >전송</button><button onclick = "modify_free();" >수정</button><button onclick = "delete_free();" >수정</button>
+          <button onclick = "send_free_add();" >전송</button><button onclick = "send_free_modify();" >수정</button>
       </div>
     </div>
   </div>
 
+<!--free detail-->
 
-  <div id="freeBoard_detail_div" class="window project ui-draggable windows-vis">
+
+<div id="freeBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
     <nav class="control-window">
       <a href="#" class="deactive close_btn">"deactive:"</a>
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
     <div class="titleInside">
-      <p>TWOSOMEPLACE</p>
+      <div>
+        <button onclick = "modify_free();" >수정</button>
+        <button onclick = "delete_free();">삭제</button>
+        <input/>
+        <span style="margin-right:10px">>>  </span>
+      </div>
     </div>
     <div class="container">
       <div class="container-inside">
-        <p id = "freetitle"></p>
-        <p id = "freeuser"></p>
-        <p id = "freecontent"></p>
-        <p id = "freetag"></p>
+        <div class="detail-list-area" id = "detail-list-area">
+        </div>
+        <div class="detail-data-area">
+          <p id="detail_time" style="text-align:center">2018년 7월 31일 오후 7:30</p>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">제목 </p>
+            <p id="freetitle" style="float:left; width:80%"></p>
+          </div>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">작성자 </p>
+            <p id="freeuser" style="float:left; width:80%"></p>
+          </div>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">태그 </p>
+            <p id="freetag" style="float:left; width:80%"></p>
+          </div>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center">내용</p>
+            <p id="freecontent" style="float:left; width:80%;height: 150px;"></p>
+          </div>
+          <div class="detail-comment" style="width:100%; overflow:scroll;border-top:1px solid black;">
+            <div style="text-align:center">
+              <span>
+                  <form name = "free_comment">
+                    <textarea id="free_comments" name = "free_comments" placeholder="댓글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
+                  </form>
+                <button onclick = "send_free_comment();">미안</button>
+              </span>
+            </div>
+            <div class="FreeCommentsList" id="FreeCommentsList">
+              <div id="FreeCommentsElement" class="FreeCommentsElement">
+                <p>
+                  <span id="FreeCommentText" class="FreeCommentText">내용</span> - <span id="FreeCommentUser" class="FreeCommentUser">사용자</span> <span id="FreeCommentDate" class="FreeCommentDate">8월 2일</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
+  
+  <!--question div-->
+
+  <div id="question_div" class="window project ui-dragable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="container">
+      <div class="container-inside">
+        <img src="/images/safari.png" />
+      </div>
+    </div>
+  </div>
+
+  <!--anonymous div-->
+  <div id="anonymous_div" class="window project ui-dragable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="container">
+      <div class="container-inside">
+        <img src="/images/safari.png" />
+      </div>
+    </div>
+  </div>
+
 
   <!-- Terminal -->
   <div id="terminal_div" class="window project ui-draggable windows-vis">

@@ -124,12 +124,15 @@ html, body {
 
 
 .window {
+	border : 1px solid rgb(195, 195, 195, 0.5);
   border-radius: 5px;
   text-align: left;
   position:absolute;
 	z-index:0;
 	visibility:hidden;
-	opacity:0;
+	height: auto;
+	width: auto;
+	overflow: hidden;
 }
 .window.windows-vis {
 	visibility:visible;
@@ -147,11 +150,6 @@ html, body {
 	padding: 0;
 }
 
-.window {
-	overflow: hidden;
-	width: auto;
-	height: auto;
-}
 .titleInside {
 	background-color: rgb(215, 215, 215,0.99);
 	height: 30px;
@@ -320,4 +318,51 @@ ul.TerminalContents, ul.ChatContents {
     font-family: 'sambong';
     src: url('sambongfont.ttf') format('truetype'),
         url('sambongfont.woff') format('woff');
+}
+
+.window-detail .detail-top {
+
+	height:45px;
+	text-align: right;
+}
+.window-detail .detail-top > div {
+	padding-top: 8px;
+}
+
+.window-detail .detail-top input {
+	width: 200px;
+	margin-right: 50px
+	border: none;
+	border-radius: 5px 5px;
+}
+
+.window-detail .detail-top span {
+	margin-right: 10px;
+}
+
+.window-detail .container .detail-list-area{
+	border:1px solid black;
+	float:left;
+	width:30%;
+	height:100%;
+}
+
+.window-detail .container .detail-data-area{
+	border:1px solid red;
+	float:left;
+	width:70%;
+	height: 100%;
+	overflow: scroll;
+	padding-right: 0;
+}
+
+.window-detail .detail-list-item {
+	border-bottom : 1px solid black;
+	height: 60px;
+}
+
+.FreeCommentsElement{
+	margin: 5px 10px;
+	border-top : 1px solid gray;
+	border-bottom : 1px solid gray;
 }

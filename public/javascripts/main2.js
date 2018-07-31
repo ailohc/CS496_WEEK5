@@ -3,6 +3,7 @@ var room_id = "";
 var user_name = "";
 var user_id = "";
 var board = "";
+var free_id = "";
 
 function printClock() {
   var seoul = moment().tz("Asia/Seoul");
@@ -26,6 +27,63 @@ function printClock() {
   setTimeout("printClock()",1000);         // 1초마다 printClock() 함수 호출
 }
 
+function show_freeboard () {
+  $('#freeBoard_div').show(function(){
+    board = 1;
+    var first_tb = document.getElementById("table1");
+    first_tb.innerHTML = "";
+    var dataJSON = {"board_id": 1}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("POST", "/board/load", true);
+    xmlHttp1.setRequestHeader("Content-Type", "application/json");
+    xmlHttp1.send(data);
+    xmlHttp1.onreadystatechange = function() {
+      console.log("success1");
+      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp1.responseText);
+        for (var i in result) {
+          var elem_id1 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].nickname;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("table1");
+          var divAppend = document.createElement("tr");
+          divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail1("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+          obj.appendChild(divAppend);
+        }
+      }
+    }
+  });
+  }
+
+  function show_freecontents() {
+    var dataJSON = {contents_id : free_id};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("POST", "/comments/free/load", true);
+    xmlHttp1.setRequestHeader("Content-Type", "application/json");
+    xmlHttp1.send(data);
+    xmlHttp1.onreadystatechange = function() {
+      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp1.responseText);
+        for (var i in result) {
+          var comment_id1 = result[i].id;
+          var comment_user = result[i].user_id;
+          var comment_text = result[i].comment_text;
+          var comment_date_string = result[i].created_at.split("T");
+          var comment_date = comment_date_string[0];
+          var li = document.createElement("li");
+          li.innerHTML = "<div id=FreeCommentsElement class=FreeCommentsElement><p id = FreeCommentUser class = FreeCommentUser>"+comment_user+"</p><p id = FreeCommentDate class = FreeCommentDate>"+comment_date+"</p><p id = FreeCommentText class = FreeCommentText>"+comment_text+"</p></div>";
+          document.getElementById("FreeCommentsList").appendChild(li);
+        }
+      }
+    }
+
+  }
+
 window.onload = function() {
   var xhr = new XMLHttpRequest();
   xhr.open("GET", './getInfo', true);
@@ -44,6 +102,10 @@ window.onload = function() {
   $('#terminal_chat_div').hide();
   $('#freeBoard_div').hide();
   $('#freeBoard_add_div').hide();
+  $('#freeBoard_detail_div').hide();
+  $('#xiri_div').hide();
+  $('#question_div').hide();
+  $('#anonymous_div').hide();
   // printClock();
   $('.window').draggable();
   $(".dropdown").hide();
@@ -51,7 +113,11 @@ window.onload = function() {
   $( "form" ).submit(function( event ) {
     event.preventDefault();
   });
-
+  var z_index_increment = 10;
+  $('.window').on("click", function(e){
+    e.preventDefault();
+    $(this).css('z-index', z_index_increment++);
+  })
 
 $("#dropdown").click(function(e){
   if($(".dropdown").is(':visible')){
@@ -120,6 +186,11 @@ $('#terminal_btn').on("click", function(e){
   });
 })
 
+$('#xiri_btn').on("click", function(e){
+  e.preventDefault();
+  $('#xiri_div').show();
+})
+
 $('#terminal_div .close_btn').on("click", function(e){
   e.preventDefault();
   $('#terminal_div').hide();
@@ -132,41 +203,9 @@ $('#terminal_chat_div .close_btn').on("click", function(e) {
 
 $('#freeBoard_btn').on("dblclick", function(e){
   e.preventDefault();
-  $('#freeBoard_div').show(function(){
-    board = 1;
-    var first_tb = document.getElementById("table1");
-    first_tb.innerHTML = "";
-    var dataJSON = {"board_id": 1}
-    var data = JSON.stringify(dataJSON);
-    var xmlHttp1 = new XMLHttpRequest();
-    xmlHttp1.open("POST", "/board/", true);
-    xmlHttp1.setRequestHeader("Content-Type", "application/json");
-    xmlHttp1.send(data);
-    xmlHttp1.onreadystatechange = function() {
-      console.log("success1");
-      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
-        var result = JSON.parse(xmlHttp1.responseText);
-        for (var i in result) {
-          var elem_id = result[i].id;
-          var title = result[i].title;
-          var writer = result[i].nickname;
-          var string_data = result[i].created_at.split("T");
-          var date = string_data[0];
-          var tag = result[i].tag_text;
-          var obj = document.getElementById("table1");
-          var divAppend = document.createElement("tr");
-          divAppend.innerHTML = "<td id="+elem_id+" onclick='detail("+elem_id+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
-          obj.appendChild(divAppend);
-        }
-      }
-    }
-  });
+  show_freeboard();
 });
-var z_index_increment = 10;
-$('.window').on("click", function(e){
-  e.preventDefault();
-  $(this).css('z-index', z_index_increment++);
-})
+
 $('#freeBoard_add_btn').on("click", function(e){
   e.preventDefault();
   $('#freeBoard_add_div').show();
@@ -174,6 +213,9 @@ $('#freeBoard_add_btn').on("click", function(e){
 
 $('#freeBoard_add_div .close_btn').on("click", function(e) {
   e.preventDefault();
+  document.name_form.free_name.value = "";
+  document.contents_form.free_contents.value = "";
+  document.freetags.free_tags.value ="";
   $('#freeBoard_add_div').hide();
 })
 
@@ -181,8 +223,222 @@ $('#freeBoard_div .close_btn').on("click", function(e){
   e.preventDefault();
   $('#freeBoard_div').hide();
 })
+
+$('#freeBoard_detail_div .close_btn').on("click", function(e) {
+  e.preventDefault();
+  $('#freeBoard_detail_div').hide();
+})
+
+$('#xiri_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#xiri_div').hide();
+})
+
+$("#question_btn").on("dblclick", function(e){
+  e.preventDefault();
+  $("#question_div").show();
+})
+
+$('#question_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#question_div').hide();
+})
+
+$('#anonymous_btn').on('dblclick', function(e){
+  e.preventDefault();
+  $("#anonymous_div").show();
+})
+
+$('#anonymous_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#anonymous_div').hide();
+})
 //---------------------------------------------------------------------------------------------
+
+$('#search_input1').on("keydown", function(e){
+  if(e.keyCode === 13){
+    var dataJSON = {"board_id": 1, "keyword": $("#search_input1").val()}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/board/search", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(data);
+    xmlHttp.onreadystatechange = function() {
+      console.log("success");
+      if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp.responseText);
+        console.log(result.length);
+        if(result.length != undefined){
+          var obj = document.getElementById("table1");
+          obj.innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td onclick='detail1("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    }
+  }
+})
+
+//-------------------------------------xiri
+
+$(function() {
+  if (typeof webkitSpeechRecognition != 'function') {
+    alert('Only Works in Chrome Browser');
+    return false;
+  }
+
+  var recognition = new webkitSpeechRecognition();
+  var isRecognizing = false;
+  var ignoreOnend = false;
+  var finalTranscript = '';
+  var $btnMic = $('#btn-mic');
+ 	var $result = $('#result');
+  recognition.continuous = true;
+  recognition.interimResults = true;
+
+  recognition.onstart = function() {
+    isRecognizing = true;
+    $btnMic.attr('class', 'on');
+    response.innerHTML = '';
+    console.log("시작");
+  };
+
+  recognition.onend = function() {
+    isRecognizing = false;
+    if (ignoreOnend) {
+      return false;
+    }
+
+    // DO end process
+    $btnMic.attr('class', 'off');
+    if (!finalTranscript) {
+      return false;
+    }
+
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+      var range = document.createRange();
+      range.selectNode(document.getElementById('final-span'));
+      window.getSelection().addRange(range);
+    }
+
+  };
+
+  recognition.onresult = function(event) {
+    var interimTranscript = '';
+    if (typeof(event.results) == 'undefined') {
+      recognition.onend = null;
+      recognition.stop();
+      return;
+    }
+
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        finalTranscript += event.results[i][0].transcript;
+      } else {
+        interimTranscript += event.results[i][0].transcript;
+      }
+    }
+
+    finalTranscript = capitalize(finalTranscript);
+    final_span.innerHTML = linebreak(finalTranscript);
+    interim_span.innerHTML = linebreak(interimTranscript);
+    fireCommand(finalTranscript);
+  };
+
+  function textToSpeech(text) {
+    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+  }
+
+  function fireCommand(string) {
+    if (string.endsWith('알람') || string.endsWith('알 람')) {
+  		alert('알람');
+  	}
+    else if (string.endsWith('안녕') || string.endsWith('안 녕')) {
+      response.innerHTML = "안녕하세요";
+      textToSpeech($('#response').text());
+    }
+    else if (string.endsWith('누구야') || string.endsWith('넌 누구야') || string.endsWith('넌 누 구 야')) {
+      response.innerHTML = "안녕하세요 저는 Xiri에요";
+  	  textToSpeech('안녕하세요 저는 Xiri에요');
+    }
+    else if (string.endsWith('터미널') || string.endsWith('터미널 켜줘') || string.endsWith('터 미 널 켜 줘')) {
+      $('#xiri').modal('hide');
+      $('#myTerminal').modal('show');
+    }
+    else if (string.endsWith('꺼져') || string.endsWith('꺼 져')) {
+      $('#xiri').modal('hide');
+  	}
+  }
+
+  recognition.onerror = function(event) {
+    if (event.error == 'no-speech') {
+      ignoreOnend = true;
+    } else if (event.error == 'not-allowed') {
+      ignoreOnend = true;
+    }
+
+    $btnMic.attr('class', 'off');
+  };
+
+  var two_line = /\n\n/g;
+  var one_line = /\n/g;
+  var first_char = /\S/;
+
+  function linebreak(s) {
+    return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
+  }
+
+  function capitalize(s) {
+    return s.replace(first_char, function(m) {
+      return m.toUpperCase();
+    });
+  }
+
+  function start(event) {
+    if (isRecognizing) {
+      recognition.stop();
+      return;
+    }
+    recognition.lang = 'ko-KR';
+    recognition.start();
+    ignoreOnend = false;
+
+    finalTranscript = '';
+    final_span.innerHTML = '';
+    interim_span.innerHTML = '';
+  }
+
+  function requestServer() {
+    $.ajax({
+      method: 'post',
+      url: 'https://www.google.com/speech-api/v2/recognize?output=json&lang=en-us&key=AIzaSyDiMqfg8frtoZflA_2LPqfGdpjmgTMgWhg',
+      data: '/examples/speech-recognition/hello.wav',
+      contentType: 'audio/l16; rate=16000;', // 'audio/x-flac; rate=44100;',
+      success: function(data) {
+      },
+      error: function(xhr) {
+      }
+    });
+  }
+  $btnMic.click(start);
+});
+
+
+//-----------------end of the onload
+
 }
+
+
 
 function query_submit() {
   let query = document.getElementById("TerminalQuery").value;
@@ -212,6 +468,7 @@ function query_submit() {
         chat_message.appendChild(chat_message_text);
         document.getElementById("ChatList").appendChild(chat_message);
         });
+        $('#ChatQuery').focus();
       });;
   }
   if (split_query[0] === "cd") {
@@ -219,7 +476,7 @@ function query_submit() {
     folder_id = split_query[1];
     if (folder_id === 'free') {
       $('#terminal_div').hide();
-      //$('#terminal_chat_div').show();
+      show_freeboard();
     }
     else if (folder_id === 'anonymous') {
       $('#terminal_div').hide();
@@ -233,7 +490,9 @@ function chat_submit() {
   console.log(document.getElementById("ChatQuery").value);
   if (chat_query === ':wq') {
     $('#terminal_chat_div').hide();
-    $('#terminal_div').show();
+    $('#terminal_div').show(function(){
+      $('#TerminalQuery').focus();
+    });
   }
   socket.emit('send:message', {roomId: room_id, message: chat_query});
   document.getElementById("ChatQuery").value = "";
@@ -243,5 +502,118 @@ function add_free() {
   $('#freeBoard_div').hide();
   $('#freeBoard_add_div').show();
 }
+
+
+function send_free_add () {
+  console.log(document.freetags.free_tags.value);
+  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : document.freetags.free_tags.value};
+  var data = JSON.stringify(dataJSON);
+  console.log(dataJSON);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/board/contents", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+  $('#freeBoard_add_div').hide();
+  document.name_form.free_name.value = "";
+  document.contents_form.free_contents.value = "";
+  document.freetags.free_tags.value ="";
+  show_freeboard();
+
+}
+
+function detail1(elem_id1) {
+  $('#freeBoard_div').hide();
+  $('#freeBoard_detail_div').show();
+  free_id = elem_id1;
+  console.log(elem_id1);
+  var dataJSON = {"board_id" : board, "contents_id" : elem_id1};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/detail", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+        $("#freetitle").text(result_obj.title);
+        $("#freeuser").text(result_obj.nickname);
+        $("#freecontent").text(result_obj.contents_text);
+        $("#freetag").text(result_obj.tag_text);
+
+    }
+  }
+}
+
+function delete_free() {
+  var dataJSON = {"contents_id" : free_id, "user_id" : user_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/contents/delete", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Deleting failed') {
+      $('#freeBoard_detail_div').hide();
+      show_freeboard();
+    } else {
+      alert("Failed To Delete!");
+    }
+    }
+  }
+}
+
+function modify_free() {
+  modify_free_title = $("#freetitle").text();
+  modify_free_user = $("#freeuser").text();
+  modify_free_content = $("#freecontent").text();
+  modify_free_tag =  $("#freetag").text();
+  $('#freeBoard_detail_div').hide();
+  document.name_form.free_name.value = modify_free_title;
+  document.contents_form.free_contents.value = modify_free_content;
+  document.freetags.free_tags.value = modify_free_tag;
+  $('#freeBoard_add_div').show();
+}
+
+function send_free_modify () {
+  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "title" : document.name_form.free_name.value, "contents_text": document.contents_form.free_contents.value, "tags":  document.freetags.free_tags.value};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/contents/edit", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Editing failed') {
+      $('#freeBoard_add_div').hide();
+      document.name_form.free_name.value = "";
+      document.contents_form.free_contents.value = "";
+      document.freetags.free_tags.value ="";
+      show_freeboard();
+    } else {
+      alert("Failed To Edit!");
+    }
+    }
+  }
+}
+
+function send_free_comment () {
+  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "comment_text" : document.free_commment.free_comments};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/comments/free", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  document.free_commment.free_comments = "";
+}
+
 
 // -------------------------------------------------------------------------------

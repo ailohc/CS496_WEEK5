@@ -19,6 +19,7 @@ router.post('/signup', asyncMiddleware(async function(req, res, next) {
   var nickname = req.body.nickname;
 
   var ret = await db.SignUp(id, password, nickname);
+  console.log(ret);
   res.json(ret);
 }));
 
@@ -34,6 +35,7 @@ router.post('/signin', asyncMiddleware(async function(req, res, next) {
       _id: id,
       username: username
     }
+
     return res.json({ success: true })
       // RETURN SUCCESS
   } else {

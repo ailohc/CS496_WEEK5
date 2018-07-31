@@ -104,8 +104,9 @@
       xhr.setRequestHeader("Content-Type", "application/json");
       xhr.onload = function(){
         var jr = JSON.parse(this.responseText);
+        console.log(jr);
 
-        if(jr.success){
+        if(jr.result.success){
           $('.input2').val('')
           $('#signup_form').fadeOut('300',function(){
             $('#button_set').fadeIn('300', function(){
