@@ -116,37 +116,38 @@
 
 
   <!--Addfreeboard-->
-  <div id="freeBoard_add_div" class="window project ui-draggable windows-vis">
-    <nav class="control-window">
-      <a href="#" class="deactive close_btn">"deactive:"</a>
-      <a href="#" class="deactive yellow_btn">"deactive:"</a>
-      <a href="#" class="deactive full_btn">"deactive:"</a>
-    </nav>
-    <div class="titleInside">
-      <p>TWOSOMEPLACE</p>
-    </div>
-    <div class="container">
-      <div class="container-inside">
-        제목
-        <form name = "name_form"><textarea rows = "1" id="free_name" name ="free_name"></textarea></form>
-        내용
-        <form name = "contents_form"><textarea rows = "5" id="free_contents" name ="free_contents"></textarea></form>
-        <form name = "freetags"><textarea rows = "1" id="free_tags" name ="free_tags"></textarea></form>
+  <div id="freeBoard_add_div" class="window project ui-draggable windows-vis window-detail">
+      <nav class="control-window">
+        <a href="#" class="deactive close_btn">"deactive:"</a>
+        <a href="#" class="deactive yellow_btn">"deactive:"</a>
+        <a href="#" class="deactive full_btn">"deactive:"</a>
+      </nav>
+      <div class="titleInside create-top">
+        <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
+        <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
+        <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
+      </div>
+      <div class="container">
+        <div class="container-inside" style="padding:10px 90px;text-align:center;">
+          <p >
+          2018년 7월 31일 오후 9:18
+          </p>
+          <form name = "name_form"><textarea placeholder="제목 입력" rows = "1" id="free_name" name ="free_name"></textarea></form>
+          <form name = "contents_form"><textarea placeholder="내용 입력" rows = "5" id="free_contents" name ="free_contents"></textarea></form>
+          <form name = "freetags"><textarea placeholder="태그 입력" rows = "1" id="free_tags" name ="free_tags"></textarea></form>
           <button onclick = "send_free_add();" >전송</button><button onclick = "send_free_modify();" >수정</button>
+        </div>
       </div>
     </div>
-  </div>
 
 <!--free detail-->
-
-
 <div id="freeBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
     <nav class="control-window">
       <a href="#" class="deactive close_btn">"deactive:"</a>
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
-    <div class="titleInside">
+    <div class="titleInside detail-top">
       <div>
         <button onclick = "modify_free();" >수정</button>
         <button onclick = "delete_free();">삭제</button>
@@ -206,13 +207,59 @@
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
-    <h1 class="titleInside">TWOSOMEPLACE</h1>
-    <div class="container">
-      <div class="container-inside">
-        <img src="/images/safari.png" />
+    <div class="noticetitleInside">
+        <p>TWOSOMEPLACE</p>
+        <div style="text-align:right; margin-right: 10px">
+          <input id="search_input2" type="text" name="keyword" placeholder="검색"/>
+        </div>
+        <div style="text-align:right; margin-right: 10px;padding: 4px 0">
+          <button id="QuestionBoard_add_btn" onclick="add_question();">+</button>
+        </div>
       </div>
+    <div class="container">
+          <div class="container-inside">
+              <table>
+                <thead>
+                  <tr>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>날짜</th>
+                    <th>태그</th>
+                  </tr>
+                </thead>
+                <tbody id ="table2">
+                </tbody>
+              </table>
+            </div>
     </div>
   </div>
+
+
+  <!--question add-->
+
+  <div id="question_add_div" class="window project ui-draggable windows-vis window-detail">
+      <nav class="control-window">
+        <a href="#" class="deactive close_btn">"deactive:"</a>
+        <a href="#" class="deactive yellow_btn">"deactive:"</a>
+        <a href="#" class="deactive full_btn">"deactive:"</a>
+      </nav>
+      <div class="titleInside create-top">
+        <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
+        <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
+        <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
+      </div>
+      <div class="container">
+        <div class="container-inside" style="padding:10px 90px;text-align:center;">
+          <p >
+          2018년 7월 31일 오후 9:18
+          </p>
+          <form name = "question_name_form"><textarea placeholder="제목 입력" rows = "1" id="question_name" name ="question_name"></textarea></form>
+          <form name = "question_contents_form"><textarea placeholder="내용 입력" rows = "5" id="question_contents" name ="question_contents"></textarea></form>
+          <form name = "question_freetags"><textarea placeholder="태그 입력" rows = "1" id="question_tags" name ="question_tags"></textarea></form>
+          <button onclick = "send_question_add();" >전송</button><button onclick = "send_question_modify();" >수정</button>
+        </div>
+      </div>
+    </div>
 
   <!--anonymous div-->
   <div id="anonymous_div" class="window project ui-dragable windows-vis">
@@ -221,10 +268,29 @@
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
-    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="noticetitleInside">
+        <p>TWOSOMEPLACE</p>
+        <div style="text-align:right; margin-right: 10px">
+          <input id="search_input3" type="text" name="keyword" placeholder="검색"/>
+        </div>
+        <div style="text-align:right; margin-right: 10px;padding: 4px 0">
+          <button id="anomBoard_add_btn" onclick="add_anom();">+</button>
+        </div>
+      </div>
     <div class="container">
       <div class="container-inside">
-        <img src="/images/safari.png" />
+          <table>
+              <thead>
+                <tr>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>날짜</th>
+                  <th>태그</th>
+                </tr>
+              </thead>
+              <tbody id ="table3">
+              </tbody>
+            </table>
       </div>
     </div>
   </div>

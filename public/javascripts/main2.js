@@ -59,13 +59,44 @@ function show_freeboard () {
   });
   }
 
-  function show_freecontents() {
+  function show_free_side () {
+    document.getElementById("detail-list-area").innerHTML = "";
+    var dataJSON = {"board_id": 1}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("POST", "/board/load", true);
+    xmlHttp1.setRequestHeader("Content-Type", "application/json");
+    xmlHttp1.send(data);
+    xmlHttp1.onreadystatechange = function() {
+      console.log("success1");
+      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp1.responseText);
+        document.getElementById("detail-list-area").innerHTML = "";
+        for (var i in result) {
+          var elem_id1 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].nickname;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("detail-list-area");
+          var divAppend = document.createElement("div");
+          divAppend.className = "detail-list-item";
+          divAppend.innerHTML = "<p onclick = 'detail1("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          obj.appendChild(divAppend);
+        }
+      }
+    }
+
+  }
+
+  function show_freecomments() {
+    document.getElementById("FreeCommentsList").innerHTML = "";
     var dataJSON = {contents_id : free_id};
     var data = JSON.stringify(dataJSON);
     var xmlHttp1 = new XMLHttpRequest();
-    xmlHttp1.open("POST", "/comments/free/load", true);
+    xmlHttp1.open("POST", "board/comments/free/load", true);
     xmlHttp1.setRequestHeader("Content-Type", "application/json");
-    xmlHttp1.send(data);
     xmlHttp1.onreadystatechange = function() {
       if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
         var result = JSON.parse(xmlHttp1.responseText);
@@ -75,14 +106,80 @@ function show_freeboard () {
           var comment_text = result[i].comment_text;
           var comment_date_string = result[i].created_at.split("T");
           var comment_date = comment_date_string[0];
-          var li = document.createElement("li");
-          li.innerHTML = "<div id=FreeCommentsElement class=FreeCommentsElement><p id = FreeCommentUser class = FreeCommentUser>"+comment_user+"</p><p id = FreeCommentDate class = FreeCommentDate>"+comment_date+"</p><p id = FreeCommentText class = FreeCommentText>"+comment_text+"</p></div>";
+          var li = document.createElement("div");
+          li.className = "FreeCommentsElement"
+          li.innerHTML = "<span id = 'FreeCommentText' class = 'FreeCommentText'>"+comment_text+"</span> - <span id = 'FreeCommentUser' class = 'FreeCommentUser'>"+comment_user+"</span><span id = 'FreeCommentDate' class = 'FreeCommentDate'>"+comment_date+"</span><button id= 'FreeCommentDelete' class = 'FreeCommentDelete' onclick = 'Delete_free_comments("+comment_id1+");'>삭제</button>";
           document.getElementById("FreeCommentsList").appendChild(li);
         }
       }
     }
-
+    xmlHttp1.send(data);
   }
+
+  function show_question () {
+    $('#question_div').show(function(){
+      board = 2;
+      var first_tb = document.getElementById("table2");
+      first_tb.innerHTML = "";
+      var dataJSON = {"board_id": 2}
+      var data = JSON.stringify(dataJSON);
+      var xmlHttp1 = new XMLHttpRequest();
+      xmlHttp1.open("POST", "/board/load", true);
+      xmlHttp1.setRequestHeader("Content-Type", "application/json");
+      xmlHttp1.send(data);
+      xmlHttp1.onreadystatechange = function() {
+        console.log("success2");
+        if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+          var result = JSON.parse(xmlHttp1.responseText);
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var obj = document.getElementById("table2");
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    });
+    }
+
+    function show_anomboard () {
+      $('#anonymous_div').show(function(){
+        board = 3;
+        var first_tb = document.getElementById("table3");
+        first_tb.innerHTML = "";
+        var dataJSON = {"board_id": 3}
+        var data = JSON.stringify(dataJSON);
+        var xmlHttp1 = new XMLHttpRequest();
+        xmlHttp1.open("POST", "/board/load/anonym", true);
+        xmlHttp1.setRequestHeader("Content-Type", "application/json");
+        xmlHttp1.send(data);
+        xmlHttp1.onreadystatechange = function() {
+          console.log("success3");
+          if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+            var result = JSON.parse(xmlHttp1.responseText);
+            for (var i in result) {
+              console.log(result[i].id);
+              var elem_id1 = result[i].id;
+              var title = result[i].title;
+              var writer = result[i].user_name;
+              var string_data = result[i].created_at.split("T");
+              var date = string_data[0];
+              var tag = result[i].tag_text;
+              var obj = document.getElementById("table3");
+              var divAppend = document.createElement("tr");
+              divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+              obj.appendChild(divAppend);
+            }
+          }
+        }
+      });
+      }
 
 window.onload = function() {
   var xhr = new XMLHttpRequest();
@@ -236,7 +333,7 @@ $('#xiri_div .close_btn').on("click", function(e){
 
 $("#question_btn").on("dblclick", function(e){
   e.preventDefault();
-  $("#question_div").show();
+  show_question();
 })
 
 $('#question_div .close_btn').on("click", function(e){
@@ -246,7 +343,7 @@ $('#question_div .close_btn').on("click", function(e){
 
 $('#anonymous_btn').on('dblclick', function(e){
   e.preventDefault();
-  $("#anonymous_div").show();
+  show_anomboard();
 })
 
 $('#anonymous_div .close_btn').on("click", function(e){
@@ -287,6 +384,75 @@ $('#search_input1').on("keydown", function(e){
     }
   }
 })
+
+
+$('#search_input2').on("keydown", function(e){
+  if(e.keyCode === 13){
+    var dataJSON = {"board_id": 2, "keyword": $("#search_input2").val()}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/board/search", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(data);
+    xmlHttp.onreadystatechange = function() {
+      console.log("success");
+      if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp.responseText);
+        console.log(result.length);
+        if(result.length != undefined){
+          var obj = document.getElementById("table2");
+          obj.innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td onclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    }
+  }
+})
+
+
+$('#search_input3').on("keydown", function(e){
+  if(e.keyCode === 13){
+    var dataJSON = {"board_id": 3, "keyword": $("#search_input3").val()}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/board/search/anonym", true);  //*******************should modify************** */
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(data);
+    xmlHttp.onreadystatechange = function() {
+      console.log("success");
+      if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp.responseText);
+        console.log(result.length);
+        if(result.length != undefined){
+          var obj = document.getElementById("table3");
+          obj.innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    }
+  }
+})
+
 
 //-------------------------------------xiri
 
@@ -477,6 +643,7 @@ function query_submit() {
     if (folder_id === 'free') {
       $('#terminal_div').hide();
       show_freeboard();
+      show_freecomments();
     }
     else if (folder_id === 'anonymous') {
       $('#terminal_div').hide();
@@ -503,7 +670,7 @@ function add_free() {
   $('#freeBoard_add_div').show();
 }
 
-
+//------------------------------------for free board
 function send_free_add () {
   console.log(document.freetags.free_tags.value);
   var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : document.freetags.free_tags.value};
@@ -518,6 +685,7 @@ function send_free_add () {
   document.contents_form.free_contents.value = "";
   document.freetags.free_tags.value ="";
   show_freeboard();
+  show_freecomments();
 
 }
 
@@ -541,9 +709,10 @@ function detail1(elem_id1) {
         $("#freeuser").text(result_obj.nickname);
         $("#freecontent").text(result_obj.contents_text);
         $("#freetag").text(result_obj.tag_text);
-
     }
+    show_free_side();
   }
+  show_freecomments();
 }
 
 function delete_free() {
@@ -561,6 +730,7 @@ function delete_free() {
       if (result_obj.message !== 'Deleting failed') {
       $('#freeBoard_detail_div').hide();
       show_freeboard();
+      show_freecomments();
     } else {
       alert("Failed To Delete!");
     }
@@ -598,6 +768,7 @@ function send_free_modify () {
       document.contents_form.free_contents.value = "";
       document.freetags.free_tags.value ="";
       show_freeboard();
+      show_freecomments();
     } else {
       alert("Failed To Edit!");
     }
@@ -606,14 +777,34 @@ function send_free_modify () {
 }
 
 function send_free_comment () {
-  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "comment_text" : document.free_commment.free_comments};
+  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "comment_text" : document.getElementById("free_comments").value};
   var data = JSON.stringify(dataJSON);
   var xhr1 = new XMLHttpRequest();
   xhr1.open("POST", "/board/comments/free", true);
   xhr1.setRequestHeader("Content-Type", "application/json");
   xhr1.send(data);
-  document.free_commment.free_comments = "";
+  document.getElementById("free_comments").value = "";
+  show_freecomments();
 }
 
+function Delete_free_comments(comment_id1) {
+  var dataJSON = {"comment_id" : comment_id1, "user_id" : user_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/comments/free/delete", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+    document.getElementById("free_comments").value = "";
+    var resultJSON = xhr1.response;
+    result_obj = JSON.parse(resultJSON);
+    show_freecomments();
+    $('#freeBoard_detail_div').hide();
+    $('#freeBoard_detail_div').show();
+    show_free_side();
+  }
+}
+}
 
 // -------------------------------------------------------------------------------

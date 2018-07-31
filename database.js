@@ -87,7 +87,9 @@ exports.LoadBoard = async function LoadBoard_(board_id) {
 
 let loadAnonymBoard = (board_id) => {
   return new Promise((resolve, reject) => {
-    var q = 'SELECT * FROM anonym_comments;'
+    console.log('hi')
+    var q = 'SELECT * FROM anonym_contents;'
+    console.log(q);
     connection.query(q, function(err, result) {
       if (err) {
         console.error(err);
@@ -141,10 +143,12 @@ exports.LoadBoardSearch = async function LoadBoardSearch_(board_id, keyword) {
 
 let loadAnonymBoardSearch = (keyword) => {
   return new Promise((resolve, reject) => {
+    console.log('hi');
     var q = 'SELECT * FROM anonym_contents WHERE title LIKE \"%' + keyword + '%\" OR tag_text LIKE \"%' + keyword + '%\";'
+    console.log(q);
     connection.query(q, function(err, result) {
       if (err) {
-        console.error(err)''
+        console.error(err);
       }
       else {
         if (result.length) {
@@ -158,7 +162,7 @@ let loadAnonymBoardSearch = (keyword) => {
   })
 }
 
-exports loadAnonymBoardSearch = async function loadAnonymBoardSearch_(keyword) {
+exports.loadAnonymBoardSearch = async function loadAnonymBoardSearch_(keyword) {
   var result;
   await loadAnonymBoardSearch(keyword).then(function(data) {
     result = data;
@@ -371,7 +375,7 @@ let showDetail = (contents_id, board_id) => {
           resolve(result[0]);
         }
         else {
-          resolve({'message' : 'There is no contents'});
+          resolve({'message' : 'There is no content'});
         }
       }
     })
@@ -381,6 +385,33 @@ let showDetail = (contents_id, board_id) => {
 exports.showDetail = async function showDetail_(contents_id, board_id) {
   var result;
   await showDetail(contents_id, board_id).then(function(data) {
+    result = data;
+  })
+  return result;
+}
+
+let showAnonymDetail = (contents_id) => {
+  return new Promise((resolve, reject) => {
+    var q = 'SELECT * FROM anonym_contents WHERE id=' + contents_id + ';'
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.length) {
+          resolve(result[0]);
+        }
+        else {
+          resolve({'message' : 'There is no content'});
+        }
+      }
+    })
+  })
+}
+
+exports.showAnonymDetail = async function showAnonymDetail_(contents_id) {
+  var result;
+  await showAnonymDetail(contents_id).then(function(data) {
     result = data;
   })
   return result;
@@ -521,6 +552,33 @@ exports.newProbComment = async function newProbComment_(contents_id, user_id, co
   return result;
 }
 
+let newAnonymComment = (contents_id, user_name, comment_text, password) => {
+  return new Promise((resolve, reject) => {
+    var q = 'INSERT INTO anonym_comments (contents_id, user_name, comment_text, created_at, password) values (' + contents_id +', \"' + user_name + '\", \"' + comment_text + '\", NOW(), \"' + password + '\");'
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.length) {
+          resolve(result);
+        }
+        else {
+          resolve({'message' : 'Posting comment failed'});
+        }
+      }
+    })
+  })
+}
+
+exports.newAnonymComment = async function newAnonymComment_(contents_id, user_name, comment_text, password) {
+  var result;
+  await newAnonymComment(contents_id, user_name, comment_text, password).then(function(data) {
+    result = data;
+  })
+  return result;
+}
+
 let editFreeComment = (comment_id, user_id, comment_text) => {
   return new Promise((resolve, reject) => {
     var q = 'UPDATE free_comments SET comment_text=\"' + comment_text + '\", created_at=NOW() WHERE id=' + comment_id + ' AND user_id=\"' + user_id + '\";'
@@ -598,6 +656,60 @@ let deleteProbComment = (comment_id, user_id) => {
 exports.deleteProbComment = async function deleteProbComment_(comment_id, user_id) {
   var result;
   await deleteProbComment(comment_id, user_id).then(function(data) {
+    result = data;
+  })
+  return result;
+}
+
+let deleteAnonymComment = (comment_id) => {
+  return new Promise((resolve, reject) => {
+    var q = 'DELETE FROM anonym_comments WHERE id=' + comment_id + ';'
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.affectedRows < 1) {
+          resolve ({'message' : 'Deleteing comment failed'});
+        }
+        else {
+          resolve ({'message' : 'Delete Success'});
+        }
+      }
+    })
+  })
+}
+
+exports.deleteAnonymComment = async function deleteAnonymComment_(comment_id) {
+  var result;
+  await deleteAnonymComment(comment_id).then(function(data) {
+    result = data;
+  })
+  return result;
+}
+
+let pwAnonymConfirm = (password, comments_id) => {
+  return new Promise((resolve, reject) => {
+    var q = 'SELECT * FROM anonym_comments WHERE id=' + comments_id + ' AND password=\"' + password + '\";'
+    connection.query(q, function(err, result) {
+      if (err) {
+        console.error(err);
+      }
+      else {
+        if (result.length) {
+          resolve (result);
+        }
+        else {
+          resolve ({'message' : 'Wrong password'});
+        }
+      }
+    })
+  })
+}
+
+exports.pwAnonymConfirm = async function pwAnonymConfirm_(password, comments_id) {
+  var result;
+  await pwAnonymConfirm(password, comments_id).then(function(data) {
     result = data;
   })
   return result;

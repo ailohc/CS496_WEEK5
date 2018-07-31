@@ -60,7 +60,6 @@ function show_freeboard () {
   }
 
   function show_free_side () {
-    console.log("freeee");
     document.getElementById("detail-list-area").innerHTML = "";
     var dataJSON = {"board_id": 1}
     var data = JSON.stringify(dataJSON);
@@ -115,8 +114,72 @@ function show_freeboard () {
       }
     }
     xmlHttp1.send(data);
-
   }
+
+  function show_question () {
+    $('#question_div').show(function(){
+      board = 2;
+      var first_tb = document.getElementById("table2");
+      first_tb.innerHTML = "";
+      var dataJSON = {"board_id": 2}
+      var data = JSON.stringify(dataJSON);
+      var xmlHttp1 = new XMLHttpRequest();
+      xmlHttp1.open("POST", "/board/load", true);
+      xmlHttp1.setRequestHeader("Content-Type", "application/json");
+      xmlHttp1.send(data);
+      xmlHttp1.onreadystatechange = function() {
+        console.log("success2");
+        if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+          var result = JSON.parse(xmlHttp1.responseText);
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var obj = document.getElementById("table2");
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    });
+    }
+
+    function show_anomboard () {
+      $('#anonymous_div').show(function(){
+        board = 3;
+        var first_tb = document.getElementById("table3");
+        first_tb.innerHTML = "";
+        var dataJSON = {"board_id": 3}
+        var data = JSON.stringify(dataJSON);
+        var xmlHttp1 = new XMLHttpRequest();
+        xmlHttp1.open("POST", "/board/load/anonym", true);
+        xmlHttp1.setRequestHeader("Content-Type", "application/json");
+        xmlHttp1.send(data);
+        xmlHttp1.onreadystatechange = function() {
+          console.log("success3");
+          if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+            var result = JSON.parse(xmlHttp1.responseText);
+            for (var i in result) {
+              console.log(result[i].id);
+              var elem_id1 = result[i].id;
+              var title = result[i].title;
+              var writer = result[i].user_name;
+              var string_data = result[i].created_at.split("T");
+              var date = string_data[0];
+              var tag = result[i].tag_text;
+              var obj = document.getElementById("table3");
+              var divAppend = document.createElement("tr");
+              divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+              obj.appendChild(divAppend);
+            }
+          }
+        }
+      });
+      }
 
 window.onload = function() {
   var xhr = new XMLHttpRequest();
@@ -140,6 +203,7 @@ window.onload = function() {
   $('#xiri_div').hide();
   $('#question_div').hide();
   $('#anonymous_div').hide();
+  $('#question_add_div').hide();
   // printClock();
   $('.window').draggable();
   $(".dropdown").hide();
@@ -270,7 +334,7 @@ $('#xiri_div .close_btn').on("click", function(e){
 
 $("#question_btn").on("dblclick", function(e){
   e.preventDefault();
-  $("#question_div").show();
+  show_question();
 })
 
 $('#question_div .close_btn').on("click", function(e){
@@ -280,12 +344,20 @@ $('#question_div .close_btn').on("click", function(e){
 
 $('#anonymous_btn').on('dblclick', function(e){
   e.preventDefault();
-  $("#anonymous_div").show();
+  show_anomboard();
 })
 
 $('#anonymous_div .close_btn').on("click", function(e){
   e.preventDefault();
   $('#anonymous_div').hide();
+})
+
+$('#question_add_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  document.question_name_form.question_name.value = "";
+  document.question_contents_form.question_contents.value = "";
+  document.question_freetags.question_tags.value ="";
+  $('#question_add_div').hide();
 })
 //---------------------------------------------------------------------------------------------
 
@@ -321,6 +393,75 @@ $('#search_input1').on("keydown", function(e){
     }
   }
 })
+
+
+$('#search_input2').on("keydown", function(e){
+  if(e.keyCode === 13){
+    var dataJSON = {"board_id": 2, "keyword": $("#search_input2").val()}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/board/search", true);
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(data);
+    xmlHttp.onreadystatechange = function() {
+      console.log("success");
+      if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp.responseText);
+        console.log(result.length);
+        if(result.length != undefined){
+          var obj = document.getElementById("table2");
+          obj.innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td onclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    }
+  }
+})
+
+
+$('#search_input3').on("keydown", function(e){
+  if(e.keyCode === 13){
+    var dataJSON = {"board_id": 3, "keyword": $("#search_input3").val()}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open("POST", "/board/search/anonym", true);  //*******************should modify************** */
+    xmlHttp.setRequestHeader("Content-Type", "application/json");
+    xmlHttp.send(data);
+    xmlHttp.onreadystatechange = function() {
+      console.log("success");
+      if (xmlHttp.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp.responseText);
+        console.log(result.length);
+        if(result.length != undefined){
+          var obj = document.getElementById("table3");
+          obj.innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].user_name;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            obj.appendChild(divAppend);
+          }
+        }
+      }
+    }
+  }
+})
+
 
 //-------------------------------------xiri
 
@@ -538,7 +679,12 @@ function add_free() {
   $('#freeBoard_add_div').show();
 }
 
+function add_question() {
+  console.log("aaaaaaaaa");
+  $('#question_add_div').show();
+}
 
+//------------------------------------for free board
 function send_free_add () {
   console.log(document.freetags.free_tags.value);
   var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : document.freetags.free_tags.value};
@@ -675,4 +821,19 @@ function Delete_free_comments(comment_id1) {
 }
 }
 
-// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------for question board
+
+function send_question_add () {
+  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : document.question_freetags.question_tags.value};
+  var data = JSON.stringify(dataJSON);
+  console.log(dataJSON);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/board/contents", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+  $('#freeBoard_add_div').hide();
+  document.question_name_form.question_name.value = "";
+  document.question_contents_form.question_contents.value = "";
+  document.question_freetags.question_tags.value ="";
+  show_question();
+}

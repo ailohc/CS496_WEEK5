@@ -325,6 +325,9 @@ ul.TerminalContents, ul.ChatContents {
 	height:45px;
 	text-align: right;
 }
+.window-detail .create-top {
+		height: 30px;
+}
 .window-detail .detail-top > div {
 	padding-top: 8px;
 }
@@ -352,7 +355,7 @@ ul.TerminalContents, ul.ChatContents {
 	float:left;
 	width:70%;
 	height: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
 	padding-right: 0;
 }
 
@@ -364,5 +367,12 @@ ul.TerminalContents, ul.ChatContents {
 .FreeCommentsElement{
 	margin: 5px 10px;
 	border-top : 1px solid gray;
-	border-bottom : 1px solid gray;
+}
+
+.window-detail textarea {
+	border:none;
+	resize:none;
+	width: 60%;
+	border: 0.5px solid rgb(213, 213, 213);
+	border-radius : 5px;
 }
