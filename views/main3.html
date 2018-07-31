@@ -11,7 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
   <script src="https://momentjs.com/downloads/moment-timezone.js"></script>
  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
-  <script src="javascripts/main2.js"></script>
+  <script src="javascripts/main3.js"></script>
 </head>
 <body>
   <header>
@@ -98,13 +98,13 @@
     </div>
     <div class="container">
       <div class="container-inside">
-        <table class="table table-sm table-striped">
+        <table>
           <thead>
-            <tr class="table-head">
-              <th scope="col">제목</th>
-              <th scope="col">작성자</th>
-              <th scope="col">날짜</th>
-              <th scope="col">태그</th>
+            <tr>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>날짜</th>
+              <th>태그</th>
             </tr>
           </thead>
           <tbody id ="table1">
@@ -117,31 +117,31 @@
 
   <!--Addfreeboard-->
   <div id="freeBoard_add_div" class="window project ui-draggable windows-vis window-detail">
-    <nav class="control-window">
-      <a href="#" class="deactive close_btn">"deactive:"</a>
-      <a href="#" class="deactive yellow_btn">"deactive:"</a>
-      <a href="#" class="deactive full_btn">"deactive:"</a>
-    </nav>
-    <div class="titleInside create-top">
-      <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
-      <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
-      <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
-    </div>
-    <div class="container">
-      <div class="container-inside" style="padding:10px 90px;text-align:center;">
-        <p >
-        2018년 7월 31일 오후 9:18
-        </p>
-        <form name = "name_form"><textarea placeholder="제목 입력" rows = "1" id="free_name" name ="free_name"></textarea></form>
-        <form name = "contents_form"><textarea placeholder="내용 입력" rows = "5" id="free_contents" name ="free_contents"></textarea></form>
-        <form name = "freetags"><textarea placeholder="태그 입력" rows = "1" id="free_tags" name ="free_tags"></textarea></form>
-        <button onclick = "send_free_add();" >전송</button><button onclick = "send_free_modify();" >수정</button>
+      <nav class="control-window">
+        <a href="#" class="deactive close_btn">"deactive:"</a>
+        <a href="#" class="deactive yellow_btn">"deactive:"</a>
+        <a href="#" class="deactive full_btn">"deactive:"</a>
+      </nav>
+      <div class="titleInside create-top">
+        <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
+        <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
+        <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
+      </div>
+      <div class="container">
+        <div class="container-inside" style="padding:10px 90px;text-align:center;">
+          <p >
+          2018년 7월 31일 오후 9:18
+          </p>
+          <form name = "name_form"><textarea placeholder="제목 입력" rows = "1" id="free_name" name ="free_name"></textarea></form>
+          <form name = "contents_form"><textarea placeholder="내용 입력" rows = "5" id="free_contents" name ="free_contents"></textarea></form>
+          <form name = "freetags"><textarea placeholder="태그 입력" rows = "1" id="free_tags" name ="free_tags"></textarea></form>
+          <button onclick = "send_free_add();" >전송</button><button onclick = "send_free_modify();" >수정</button>
+        </div>
       </div>
     </div>
-  </div>
 
-
-  <div id="freeBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
+<!--free detail-->
+<div id="freeBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
     <nav class="control-window">
       <a href="#" class="deactive close_btn">"deactive:"</a>
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
@@ -157,19 +157,7 @@
     </div>
     <div class="container">
       <div class="container-inside">
-        <div class="detail-list-area">
-          <div class="detail-list-item">
-            <p style="font-weight: bold; overflow: hidden;margin: 7px;">이것은 제목이다</p>
-            <p style="font-size:5px;margin: 7px;"><span>2018. 7.20.</span>이것은 제목이다</p>
-          </div>
-          <div class="detail-list-item">
-            <p style="font-weight: bold; overflow: hidden;margin: 7px;">이것은 제목이다</p>
-            <p style="font-size:5px;margin: 7px;"><span>2018. 7.20.</span>이것은 제목이다</p>
-          </div>
-          <div class="detail-list-item">
-            <p style="font-weight: bold; overflow: hidden;margin: 7px;">이것은 제목이다</p>
-            <p style="font-size:5px;margin: 7px;"><span>2018. 7.20.</span>이것은 제목이다</p>
-          </div>
+        <div class="detail-list-area" id = "detail-list-area">
         </div>
         <div class="detail-data-area">
           <p id="detail_time" style="text-align:center">2018년 7월 31일 오후 7:30</p>
@@ -192,11 +180,13 @@
           <div class="detail-comment" style="width:100%; overflow:scroll;border-top:1px solid black;">
             <div style="text-align:center">
               <span>
-                <textarea placeholder="댓글 입력" style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
-                <button>미안</button>
+                  <form name = "free_comment">
+                    <textarea id="free_comments" name = "free_comments" placeholder="댓글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
+                  </form>
+                <button onclick = "send_free_comment();">미안</button>
               </span>
             </div>
-            <div class="FreeCommentsList">
+            <div class="FreeCommentsList" id="FreeCommentsList">
               <div id="FreeCommentsElement" class="FreeCommentsElement">
                 <p>
                   <span id="FreeCommentText" class="FreeCommentText">내용</span> - <span id="FreeCommentUser" class="FreeCommentUser">사용자</span> <span id="FreeCommentDate" class="FreeCommentDate">8월 2일</span>
@@ -217,15 +207,59 @@
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
-    <h1 class="titleInside">TWOSOMEPLACE</h1>
-    <div class="container">
-      <div class="container-inside">
-        <img src="/images/safari.png" />
+    <div class="noticetitleInside">
+        <p>TWOSOMEPLACE</p>
+        <div style="text-align:right; margin-right: 10px">
+          <input id="search_input2" type="text" name="keyword" placeholder="검색"/>
+        </div>
+        <div style="text-align:right; margin-right: 10px;padding: 4px 0">
+          <button id="QuestionBoard_add_btn" onclick="add_question();">+</button>
+        </div>
       </div>
+    <div class="container">
+          <div class="container-inside">
+              <table>
+                <thead>
+                  <tr>
+                    <th>제목</th>
+                    <th>작성자</th>
+                    <th>날짜</th>
+                    <th>태그</th>
+                  </tr>
+                </thead>
+                <tbody id ="table2">
+                </tbody>
+              </table>
+            </div>
     </div>
   </div>
 
 
+  <!--question add-->
+
+  <div id="question_add_div" class="window project ui-draggable windows-vis window-detail">
+      <nav class="control-window">
+        <a href="#" class="deactive close_btn">"deactive:"</a>
+        <a href="#" class="deactive yellow_btn">"deactive:"</a>
+        <a href="#" class="deactive full_btn">"deactive:"</a>
+      </nav>
+      <div class="titleInside create-top">
+        <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
+        <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
+        <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
+      </div>
+      <div class="container">
+        <div class="container-inside" style="padding:10px 90px;text-align:center;">
+          <p >
+          2018년 7월 31일 오후 9:18
+          </p>
+          <form name = "question_name_form"><textarea placeholder="제목 입력" rows = "1" id="question_name" name ="question_name"></textarea></form>
+          <form name = "question_contents_form"><textarea placeholder="내용 입력" rows = "5" id="question_contents" name ="question_contents"></textarea></form>
+          <form name = "question_freetags"><textarea placeholder="태그 입력" rows = "1" id="question_tags" name ="question_tags"></textarea></form>
+          <button onclick = "send_question_add();" >전송</button><button onclick = "send_question_modify();" >수정</button>
+        </div>
+      </div>
+    </div>
 
   <!--anonymous div-->
   <div id="anonymous_div" class="window project ui-dragable windows-vis">
@@ -234,72 +268,117 @@
       <a href="#" class="deactive yellow_btn">"deactive:"</a>
       <a href="#" class="deactive full_btn">"deactive:"</a>
     </nav>
-    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="noticetitleInside">
+      <!--yeju-->
+        <p>ANONYMOUS BOARD</p>
+        <div style="text-align:right; margin-right: 10px">
+          <input id="search_input3" type="text" name="keyword" placeholder="검색"/>
+        </div>
+        <div style="text-align:right; margin-right: 10px;padding: 4px 0">
+          <button id="anomBoard_add_btn" onclick="add_anom();">+</button>
+        </div>
+      </div>
     <div class="container">
       <div class="container-inside">
-        <img src="/images/safari.png" />
+          <table>
+              <thead>
+                <tr>
+                  <th>제목</th>
+                  <th>작성자</th>
+                  <th>날짜</th>
+                  <th>태그</th>
+                </tr>
+              </thead>
+              <tbody id ="table3">
+              </tbody>
+            </table>
       </div>
     </div>
   </div>
 
-  <div id="anonymous_detail_div" class="window project ui-draggable windows-vis window-detail">
-      <nav class="control-window">
-        <a href="#" class="deactive close_btn">"deactive:"</a>
-        <a href="#" class="deactive yellow_btn">"deactive:"</a>
-        <a href="#" class="deactive full_btn">"deactive:"</a>
-      </nav>
-      <div class="titleInside detail-top">
-        <div>
-          <button onclick = "modify_free();" >수정</button>
-          <button onclick = "delete_free();">삭제</button>
-          <input/>
-          <span style="margin-right:10px">>>  </span>
-        </div>
+  <!--Addanomboard-->
+  <div id="anomBoard_add_div" class="window project ui-draggable windows-vis window-detail">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="titleInside create-top">
+      <div style="width:33.3333%;margin:0;float: left;">&nbsp;</div>
+      <div style="width:33.3333%;text-align:center;margin:0;float: left;">새로운 게시물</div>
+      <div style="width:33.3333%;text-align:right;margin:0;float: left;"><button>완료</button></div>
+    </div>
+    <div class="container">
+      <div class="container-inside" style="padding:10px 90px;text-align:center;">
+        <p>2018년 7월 31일 오후 9:18</p>
+        <form name = "anom_name_form"><textarea placeholder="제목 입력" rows = "1" id="anom_name" name ="anom_name"></textarea></form>
+        <form name = "anom_nickname"><textarea placeholder="이름 입력" rows = "1" id="anom_nickname" name = "anom_nickname"></textarea></form>
+        <form name = "anom_contents_form"><textarea placeholder="내용 입력" rows = "5" id="anom_contents" name ="anom_contents"></textarea></form>
+        <form name = "anomtags"><textarea placeholder="태그 입력" rows = "1" id="anom_tags" name ="anom_tags"></textarea></form>
+        <form name = "anom_pw"><textarea placeholder="비밀번호 입력" rows = "1" id="anom_pw" name = "anom_pw"></textarea></form>
+        <button onclick = "send_anom_add();" >전송</button><button onclick = "send_anom_modify();" >수정</button>
       </div>
-      <div class="container">
-        <div class="container-inside">
-          <div class="detail-list-area" id = "detail-list-area">
+    </div>
+  </div>
+
+  <!--anom detail-->
+  <div id="anomBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="titleInside detail-top">
+      <div>
+        <button onclick = "modify_anom();">수정</button>
+        <button onclick = "delete_free();">삭제</button>
+        <input/>
+        <span style="margin-right:10px">>>  </span>
+      </div>
+    </div>
+    <div class="container">
+      <div class="container-inside">
+        <div class="detail-list-area" id = "detail-list-area-anom">
+        </div>
+        <div class="detail-data-area">
+          <p id="detail_time_anom" style="text-align:center">2018년 7월 31일 오후 7:30</p>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">제목 </p>
+            <p id="anomtitle" style="float:left; width:80%"></p>
           </div>
-          <div class="detail-data-area">
-            <p id="detail_time" style="text-align:center">2018년 7월 31일 오후 7:30</p>
-            <div style="margin: 20px 0;">
-              <p style="float:left; width:20%;overflow:hidden;text-align:center;">제목 </p>
-              <p id="freetitle" style="float:left; width:80%"></p>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">작성자 </p>
+            <p id="anomuser" style="float:left; width:80%"></p>
+          </div>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center;">태그 </p>
+            <p id="anomtag" style="float:left; width:80%"></p>
+          </div>
+          <div style="margin: 20px 0;">
+            <p style="float:left; width:20%;overflow:hidden;text-align:center">내용</p>
+            <p id="anomcontent" style="float:left; width:80%;height: 150px;"></p>
+          </div>
+          <div class="detail-comment" style="width:100%; overflow:scroll;border-top:1px solid black;">
+            <div style="text-align:center">
+              <span>
+                  <form name = "anom_comment">
+                    <textarea id="anom_comments" name = "anom_comments" placeholder="댓글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
+                  </form>
+                <button onclick = "send_anom_comment();">미안</button>
+              </span>
             </div>
-            <div style="margin: 20px 0;">
-              <p style="float:left; width:20%;overflow:hidden;text-align:center;">작성자 </p>
-              <p id="freeuser" style="float:left; width:80%"></p>
-            </div>
-            <div style="margin: 20px 0;">
-              <p style="float:left; width:20%;overflow:hidden;text-align:center;">태그 </p>
-              <p id="freetag" style="float:left; width:80%"></p>
-            </div>
-            <div style="margin: 20px 0;">
-              <p style="float:left; width:20%;overflow:hidden;text-align:center">내용</p>
-              <p id="freecontent" style="float:left; width:80%;height: 150px;"></p>
-            </div>
-            <div class="detail-comment" style="width:100%; overflow:scroll;border-top:1px solid black;">
-              <div style="text-align:center">
-                <span>
-                    <form name = "free_comment">
-                      <textarea id="free_comments" name = "free_comments" placeholder="댓글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
-                    </form>
-                  <button onclick = "send_free_comment();">미안</button>
-                </span>
-              </div>
-              <div class="FreeCommentsList" id="FreeCommentsList">
-                <div id="FreeCommentsElement" class="FreeCommentsElement">
-                  <p>
-                    <span id="FreeCommentText" class="FreeCommentText">내용</span> - <span id="FreeCommentUser" class="FreeCommentUser">사용자</span> <span id="FreeCommentDate" class="FreeCommentDate">8월 2일</span>
-                  </p>
-                </div>
+            <div class="AnomCommentsList" id="AnomCommentsList">
+              <div id="AnomCommentsElement" class="AnomCommentsElement">
+                <p>
+                  <span id="AnomCommentText" class="AnomCommentText">내용</span> - <span id="AnomCommentUser" class="AnomCommentUser">사용자</span> <span id="AnomCommentDate" class="AnomCommentDate">8월 2일</span>
+                </p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-
+  </div>
 
   <!-- Terminal -->
   <div id="terminal_div" class="window project ui-draggable windows-vis">
@@ -342,7 +421,7 @@
   </div>
 
   <!--Xiri-->
-<!--
+
   <div id="xiri_div" class="window project ui-draggable windows-vis">
     <nav class="control-window">
       <a href="#" class="deactive close_btn">"deactive:"</a>
@@ -364,7 +443,7 @@
         <button id="btn-mic" class="off">마이크 <span></span></button>
       </div>
     </div>
-  </div> -->
+  </div>
 
 
   <div class="bottom">

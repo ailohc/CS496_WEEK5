@@ -13,6 +13,10 @@ router.get('/test', function(req,res,next){
   res.render('main2')
 })
 
+router.get('/test2', function(req,res,next){
+  res.render('main3')
+})
+
 router.get('/chat', function(req, res){
   res.render('chat')
 });

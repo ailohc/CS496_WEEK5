@@ -255,11 +255,71 @@
           </p>
           <form name = "question_name_form"><textarea placeholder="제목 입력" rows = "1" id="question_name" name ="question_name"></textarea></form>
           <form name = "question_contents_form"><textarea placeholder="내용 입력" rows = "5" id="question_contents" name ="question_contents"></textarea></form>
-          <form name = "question_freetags"><textarea placeholder="태그 입력" rows = "1" id="question_tags" name ="question_tags"></textarea></form>
+          <form name = "question_tags"><textarea placeholder="태그 입력" rows = "1" id="question_tags" name ="question_tags"></textarea></form>
           <button onclick = "send_question_add();" >전송</button><button onclick = "send_question_modify();" >수정</button>
         </div>
       </div>
     </div>
+
+    <!--question detail-->
+    <div id="questionBoard_detail_div" class="window project ui-draggable windows-vis window-detail">
+        <nav class="control-window">
+          <a href="#" class="deactive close_btn">"deactive:"</a>
+          <a href="#" class="deactive yellow_btn">"deactive:"</a>
+          <a href="#" class="deactive full_btn">"deactive:"</a>
+        </nav>
+        <div class="titleInside detail-top">
+          <div>
+            <button onclick = "modify_question();" >수정</button>
+            <button onclick = "delete_question();">삭제</button>
+            <input/>
+            <span style="margin-right:10px">>>  </span>
+          </div>
+        </div>
+        <div class="container">
+          <div class="container-inside">
+            <div class="detail-list-area" id = "detail-list-area-question">
+            </div>
+            <div class="detail-data-area">
+              <p id="detail_time" style="text-align:center">2018년 7월 31일 오후 7:30</p>
+              <div style="margin: 20px 0;">
+                <p style="float:left; width:20%;overflow:hidden;text-align:center;">제목 </p>
+                <p id="questiontitle" style="float:left; width:80%"></p>
+              </div>
+              <div style="margin: 20px 0;">
+                <p style="float:left; width:20%;overflow:hidden;text-align:center;">작성자 </p>
+                <p id="questionuser" style="float:left; width:80%"></p>
+              </div>
+              <div style="margin: 20px 0;">
+                <p style="float:left; width:20%;overflow:hidden;text-align:center;">태그 </p>
+                <p id="questiontag" style="float:left; width:80%"></p>
+              </div>
+              <div style="margin: 20px 0;">
+                <p style="float:left; width:20%;overflow:hidden;text-align:center">내용</p>
+                <p id="questioncontent" style="float:left; width:80%;height: 150px;"></p>
+              </div>
+              <div class="detail-comment" style="width:100%; overflow:scroll;border-top:1px solid black;">
+                <div style="text-align:center">
+                  <span>
+                      <form name = "question_comment">
+                        <textarea id="question_comments_title" name = "question_comments_title" placeholder="제목" 입력 style="margin-top:20px;margin-bottom:10px;margin-left:20px;width:70%"></textarea>
+                        <textarea id="question_comments" name = "question_comments" placeholder="답글" 입력 style="margin-top:20px;margin-bottom:20px;margin-left:20px;width:70%"></textarea>
+                      </form>
+                    <button onclick = "send_question_comment();">미안</button>
+                  </span>
+                </div>
+                <div class="QuestionCommentsList" id="QuestionCommentsList">
+                  <div id="QuestionCommentsElement" class="QuestionCommentsElement">
+                    <p>
+                        <span id="QuestionCommentTitle" class="QuestionCommentTitle">제목</span> -<span id="QuestionCommentText" class="QuestionCommentText">내용</span> - <span id="QuestionCommentUser" class="QuestionCommentUser">사용자</span> <span id="QuestionCommentDate" class="QuestionCommentDate">8월 2일</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
   <!--anonymous div-->
   <div id="anonymous_div" class="window project ui-dragable windows-vis">

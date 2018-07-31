@@ -376,3 +376,16 @@ ul.TerminalContents, ul.ChatContents {
 	border: 0.5px solid rgb(213, 213, 213);
 	border-radius : 5px;
 }
+
+.table>thead>tr>th{
+  height:20px;
+  padding:0px;
+  border-top: 0px;
+}
+
+.table >tbody>tr>td{
+  height:15px;
+  padding:0px;
+  border-top: 0px;
+	font-size: 13px;
+}

@@ -4,7 +4,6 @@ var user_name = "";
 var user_id = "";
 var board = "";
 var free_id = "";
-var question_id = "";
 
 function printClock() {
   var seoul = moment().tz("Asia/Seoul");
@@ -88,7 +87,6 @@ function show_freeboard () {
         }
       }
     }
-
   }
 
   function show_freecomments() {
@@ -149,97 +147,67 @@ function show_freeboard () {
     });
     }
 
-
-    function show_question_side () {
-      document.getElementById("detail-list-area-question").innerHTML = "";
-      var dataJSON = {"board_id": 2}
+  function show_anomboard () {
+    $('#anonymous_div').show(function(){
+      board = 3;
+      var first_tb = document.getElementById("table3");
+      first_tb.innerHTML = "";
+      var dataJSON = {"board_id": 3}
       var data = JSON.stringify(dataJSON);
       var xmlHttp1 = new XMLHttpRequest();
-      xmlHttp1.open("POST", "/board/load", true);
+      xmlHttp1.open("POST", "/board/load/anonym", true);
       xmlHttp1.setRequestHeader("Content-Type", "application/json");
       xmlHttp1.send(data);
       xmlHttp1.onreadystatechange = function() {
-        console.log("success1");
+        console.log("success3");
         if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
           var result = JSON.parse(xmlHttp1.responseText);
-          document.getElementById("detail-list-area-question").innerHTML = "";
           for (var i in result) {
+            console.log(result[i].id);
             var elem_id1 = result[i].id;
             var title = result[i].title;
-            var writer = result[i].nickname;
+            var writer = result[i].user_name;
             var string_data = result[i].created_at.split("T");
             var date = string_data[0];
             var tag = result[i].tag_text;
-            var obj = document.getElementById("detail-list-area-question");
-            var divAppend = document.createElement("div");
-            divAppend.className = "detail-list-item";
-            divAppend.innerHTML = "<p onclick = 'detail2("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+            var obj = document.getElementById("table3");
+            var divAppend = document.createElement("tr");
+            divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
             obj.appendChild(divAppend);
           }
         }
       }
-    }
-  
+    });
+  }
 
-    function show_questioncomments() {
-      document.getElementById("questionCommentsList").innerHTML = "";
-      var dataJSON = {contents_id : question_id};
-      var data = JSON.stringify(dataJSON);
-      var xmlHttp1 = new XMLHttpRequest();
-      xmlHttp1.open("POST", "board/comments/prob/load", true);
-      xmlHttp1.setRequestHeader("Content-Type", "application/json");
-      xmlHttp1.onreadystatechange = function() {
-        if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
-          var result = JSON.parse(xmlHttp1.responseText);
-          for (var i in result) {
-            var comment_id1 = result[i].id;
-            var comment_user = result[i].user_id;
-            var comment_title = result[i].title;
-            var comment_text = result[i].comment_text;
-            var comment_date_string = result[i].created_at.split("T");
-            var comment_date = comment_date_string[0];
-            var li = document.createElement("div");
-            li.className = "questionCommentsElement"
-            li.innerHTML = "<span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+"</span> - <span id = 'questionCommentText' class = 'questionCommentText'>"+comment_text+"</span> - <span id = 'questionCommentUser' class = 'questionCommentUser'>"+comment_user+"</span><span id = 'questionCommentDate' class = 'questionCommentDate'>"+comment_date+"</span><button id= 'questionCommentDelete' class = 'questionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
-            document.getElementById("questionCommentsList").appendChild(li);
-          }
+  function show_anom_side() {
+    document.getElementById("detail-list-area-anom").innerHTML = "";
+    var dataJSON = {"board_id" : 3};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "/board/load/anonym", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.send(data);
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
+        document.getElementById("detail-list-area-anom").innerHTML = "";
+        for (var i in result) {
+          var elem_id1 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].nickname;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("detail-list-area");
+          var divAppend = document.createElement("div");
+          divAppend.className = "detail-list-item";
+          divAppend.innerHTML = "<p onclick = 'detail1("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          obj.appendChild(divAppend);
         }
       }
-      xmlHttp1.send(data);
     }
-
-    function show_anomboard () {
-      $('#anonymous_div').show(function(){
-        board = 3;
-        var first_tb = document.getElementById("table3");
-        first_tb.innerHTML = "";
-        var dataJSON = {"board_id": 3}
-        var data = JSON.stringify(dataJSON);
-        var xmlHttp1 = new XMLHttpRequest();
-        xmlHttp1.open("POST", "/board/load/anonym", true);
-        xmlHttp1.setRequestHeader("Content-Type", "application/json");
-        xmlHttp1.send(data);
-        xmlHttp1.onreadystatechange = function() {
-          console.log("success3");
-          if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
-            var result = JSON.parse(xmlHttp1.responseText);
-            for (var i in result) {
-              console.log(result[i].id);
-              var elem_id1 = result[i].id;
-              var title = result[i].title;
-              var writer = result[i].user_name;
-              var string_data = result[i].created_at.split("T");
-              var date = string_data[0];
-              var tag = result[i].tag_text;
-              var obj = document.getElementById("table3");
-              var divAppend = document.createElement("tr");
-              divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
-              obj.appendChild(divAppend);
-            }
-          }
-        }
-      });
-      }
+  }
 
 window.onload = function() {
   var xhr = new XMLHttpRequest();
@@ -264,7 +232,6 @@ window.onload = function() {
   $('#question_div').hide();
   $('#anonymous_div').hide();
   $('#question_add_div').hide();
-  $('#questionBoard_detail_div').hide();
   // printClock();
   $('.window').draggable();
   $(".dropdown").hide();
@@ -417,13 +384,8 @@ $('#question_add_div .close_btn').on("click", function(e){
   e.preventDefault();
   document.question_name_form.question_name.value = "";
   document.question_contents_form.question_contents.value = "";
-  document.question_tags.question_tags.value ="";
+  document.question_freetags.question_tags.value ="";
   $('#question_add_div').hide();
-})
-
-$('#questionBoard_detail_div .close_btn').on("click", function(e){
-  e.preventDefault();
-  $('#questionBoard_detail_div').hide();
 })
 //---------------------------------------------------------------------------------------------
 
@@ -890,7 +852,7 @@ function Delete_free_comments(comment_id1) {
 // -------------------------------------------------------------------------------for question board
 
 function send_question_add () {
-  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : document.question_tags.question_tags.value};
+  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : document.question_freetags.question_tags.value};
   var data = JSON.stringify(dataJSON);
   console.log(dataJSON);
   var xhr = new XMLHttpRequest();
@@ -900,109 +862,8 @@ function send_question_add () {
   $('#freeBoard_add_div').hide();
   document.question_name_form.question_name.value = "";
   document.question_contents_form.question_contents.value = "";
-  document.question_tags.question_tags.value ="";
+  document.question_freetags.question_tags.value ="";
   show_question();
 }
 
-function detail2(elem_id2) {
-  $('#questionBoard_detail_div').show();
-  question_id = elem_id2;
-  console.log(elem_id2);
-  var dataJSON = {"board_id" : board, "contents_id" : elem_id2};
-  var data = JSON.stringify(dataJSON);
-  var xhr1 = new XMLHttpRequest();
-  xhr1.open("POST", "/board/detail", true);
-  xhr1.setRequestHeader("Content-Type", "application/json");
-  xhr1.send(data);
-  xhr1.onreadystatechange = function() {
-    if (xhr1.readyState == XMLHttpRequest.DONE) {
-      var resultJSON = xhr1.response;
-      result_obj = JSON.parse(resultJSON);
-      console.log(resultJSON);
-        $("#questiontitle").text(result_obj.title);
-        $("#questionuser").text(result_obj.nickname);
-        $("#questioncontent").text(result_obj.contents_text);
-        $("#questiontag").text(result_obj.tag_text);
-    }
-    show_question_side();
-  }
-  //show_questioncomments();
-}
-
-function delete_question() {
-  var dataJSON = {"contents_id" : question_id, "user_id" : user_id};
-  var data = JSON.stringify(dataJSON);
-  var xhr1 = new XMLHttpRequest();
-  console.log(question_id);
-  xhr1.open("POST", "/board/contents/delete", true);
-  xhr1.setRequestHeader("Content-Type", "application/json");
-  xhr1.send(data);
-  xhr1.onreadystatechange = function() {
-    if (xhr1.readyState == XMLHttpRequest.DONE) {
-      var resultJSON = xhr1.response;
-      result_obj = JSON.parse(resultJSON);
-      console.log(resultJSON);
-      if (result_obj.message !== 'Deleting failed') {
-      //$('#questionBoard_detail_div').hide();
-      show_question();
-      show_question_side();
-      //show_questioncomments();
-    } else {
-      alert("Failed To Delete!");
-    }
-    }
-  }
-}
-
-function modify_question() {
-  console.log("modifyy")
-  modify_question_title = $("#questiontitle").text();
-  modify_question_user = $("#questionuser").text();
-  modify_question_content = $("#questioncontent").text();
-  modify_question_tag =  $("#questiontag").text();
-  //$('#questionBoard_detail_div').hide();
-  document.question_name_form.question_name.value = modify_question_title;
-  document.question_contents_form.question_contents.value = modify_question_content;
-  document.question_tags.question_tags.value = modify_question_tag;
-  $('#question_add_div').show();
-}
-
-function send_question_modify () {
-  var dataJSON = {"contents_id" : question_id, "user_id" : user_id, "title" : document.question_name_form.question_name.value, "contents_text": document.question_contents_form.question_contents.value, "tags":  document.question_tags.question_tags.value};
-  var data = JSON.stringify(dataJSON);
-  var xhr1 = new XMLHttpRequest();
-  xhr1.open("POST", "/board/contents/edit", true);
-  xhr1.setRequestHeader("Content-Type", "application/json");
-  xhr1.send(data);
-  xhr1.onreadystatechange = function() {
-    if (xhr1.readyState == XMLHttpRequest.DONE) {
-      var resultJSON = xhr1.response;
-      result_obj = JSON.parse(resultJSON);
-      console.log(resultJSON);
-      if (result_obj.message !== 'Editing failed') {
-      $('#question_add_div').hide();
-      document.question_name_form.question_name.value = "";
-      document.question_contents_form.question_contents.value = "";
-      document.question_tags.question_tags.value ="";
-      show_question_side();
-      show_question();
-      //show_questioncomments();
-    } else {
-      alert("Failed To Edit!");
-    }
-    }
-  }
-}
-
-function send_question_comment () {
-  var dataJSON = {"contents_id" : question_id, "user_id" : user_id, "comment_text" : document.getElementById("question_comments").value, "title" : document.getElementById("question_comments_title").value};
-  var data = JSON.stringify(dataJSON);
-  var xhr1 = new XMLHttpRequest();
-  xhr1.open("POST", "/board/comments/prob", true);
-  xhr1.setRequestHeader("Content-Type", "application/json");
-  xhr1.send(data);
-  document.getElementById("question_comments").value = "";
-  document.getElementById("question_comments_title").value = "";
-  //show_questioncomments();
-}
-
+//--------------------------------------------for anom board
