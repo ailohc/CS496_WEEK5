@@ -7,6 +7,7 @@
 var app = require('../app');
 var debug = require('debug')('macintosh:server');
 var http = require('http');
+var fs = require('fs')
 
 /**
  * Get port from environment and store in Express.
@@ -21,8 +22,15 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+var https = require('https');
+var privateKey  = fs.readFileSync('/etc/letsencrypt/live/sambong.koreacentral.cloudapp.azure.com/privkey.pem', 'utf8');
+var certificate = fs.readFileSync('/etc/letsencrypt/live/sambong.koreacentral.cloudapp.azure.com/fullchain.pem', 'utf8');
+var credentials = {key: privateKey, cert: certificate};
+
+var httpsServer = https.createServer(credentials, app);
+
 var io = app.io
-io.attach(server);
+io.attach(httpsServer);
 /**
  * Listen on provided port, on all network interfaces.
  */
@@ -30,6 +38,8 @@ io.attach(server);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+
+httpsServer.listen(443)
 
 
 /**

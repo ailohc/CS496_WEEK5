@@ -9,13 +9,16 @@ router.get('/', function(req, res, next) {
   res.redirect('/users')
 });
 
+router.get('/test', function(req,res,next){
+  res.render('main2')
+})
 
 router.get('/chat', function(req, res){
   res.render('chat')
 });
 
 router.get('/getInfo', function(req, res){
-  res.json({user: req.session.loginInfo.username})
+  res.json({user: req.session.loginInfo.username, id: req.session.loginInfo._id})
 })
 
 module.exports = router;

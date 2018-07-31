@@ -3,7 +3,9 @@
   <title>GOOGLE</title>
   <link rel="stylesheet" href="/stylesheets/index.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="/javascripts/index.js"></script>
+  <script src="https://code.jquery.com/ui/1.10.3/jquery-ui.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="javascripts/index.js"></script>
 </head>
 <body>
   <div id="button_set">
@@ -49,7 +51,7 @@
     <center>
       <div class="round" id="signup_round"></div>
       <p class="text">웰컴 카이스트</p>
-      <form id="signup" action="/users/signup" method="post">
+      <form id="signup_" action="/users/signup" method="post">
         <div class="input_form">
           <div class="left_button">
             <button type="button" id="signup_back_button" style="border: 0; background: transparent">
@@ -69,9 +71,10 @@
             <div>
               <input id="input4" class="pw_input input2" type="password" name="pw_confirm" placeholder="비밀번호확인 입력"  autocomplete="off" />
             </div>
+            <p id="signup_error" class="error_message"></p>
           </div>
           <div id="signup_button" class="right_button">
-            <button type="submit" style="border: 0; background: transparent">
+            <button type="button" style="border: 0; background: transparent">
               <img src="/images/circle_right.png" width="23" height="23" alt="submit" />
             </button>
           </div>

@@ -3,443 +3,245 @@
   <title>BINCH</title>
     <meta charset="utf-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/stylesheets/main2.css" />
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="./socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+  <script src="https://momentjs.com/downloads/moment-timezone.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="javascripts/main.js"></script>
 </head>
 <body>
+  <header>
+    <div class="topnav">
+      <div class="topnav-left">
+        <button type="button" id="dropdown" style="border: 0; background: transparent">
+          <img id="apple_logo" src="/images/apple_logo.png" width="18" height="18" />
+        </button>
+      </div>
+      <div class="topnav-left">
+        <p class="title">시스템 환경설정</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">파일</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">편집</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">보기</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">이동</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">윈도우</p>
+      </div>
+      <div class="topnav-left">
+        <p class="item">도움말</p>
+      </div>
+      <div class="topnav-right">
+        <span id="time"></span>
+        <image id="search_icon" src="/images/search.png" width="18" height="18" />
+        <image id="siri_icon" src="/images/siri_icon.png" width="41" height="18" />
+        <image id="list_logo" src="/images/list.png" width="18" height="18" />
+      </div>
+    </div>
+  </header>
+  <div class="dropdown">
+    <div id="myDropdown" class="dropdown-content">
+      <a href="#" class="border_btm">이 Mac에 관하여</a>
+      <a href="#">시스템 환경설정</a>
+      <a href="#" class="border_btm">App Store...</a>
+      <a href="#" class="border_btm">최근 사용항목</a>
+      <a href="#" class="border_btm">강제 종료...</a>
+      <a href="#">잠자기</a>
+      <a href="#">재시동</a>
+      <a href="#" class="border_btm">시스템 종료...</a>
+      <a href="#">화면 잠금</a>
+      <a href="#">yeon suk choi 로그아웃...</a>
+    </div>
+  </div>
+
 
   <div class="container">
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal1" data-backdrop="static" data-keyboard="false">자유게시판</button>
+    <button id="freeBoard_btn" class="btn btn-info btn-lg" >자유게시판</button>
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal2" data-backdrop="static" data-keyboard="false">질문게시판</button>
     <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal3" data-backdrop="static" data-keyboard="false">익명게시판</button>
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myTerminal" data-backdrop="static" data-keyboard="false">터미널</button>
-    <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#xiri" data-backdrop="static" data-keyboard="false">Xiri</button>
+    <button id="terminal_btn" type="button" class="btn btn-info btn-lg" >터미널</button>
+    <button id="xiri_btn" class="btn btn-info btn-lg" >Xiri</button>
 
-    <!-- Modal1 자유게시판 -->
-    <div class="modal fade" id="myModal1" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">자유게시판</h4>
-            <form action="/board/search" method="post">
-              <span style="float:right"><input type="text" name="keyword" placeholder="검색"/></span>
-              <input type="hidden" name="board_id"/>
-            </form>
-          </div>
-          <div class="modal-body">
-            <div style="width:100%; border:1px solid black; margin:0; text-align:center">
-              hi
-              <span style="float:right"><button>add</button></span>
-            </div>
-            <table>
-              <thead>
-                <tr>
-                  <th>제목</th>
-                  <th>작성자</th>
-                  <th>날짜</th>
-                  <th>태그</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
+  </div>
+
+  <!--FreeBoard-->
+  <div id="freeBoard_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="noticetitleInside">
+      <p>TWOSOMEPLACE</p>
+      <div style="text-align:right; margin-right: 10px">
+        <input id="search_input1" type="text" name="keyword" placeholder="검색"/>
+      </div>
+      <div style="text-align:right; margin-right: 10px;padding: 4px 0">
+        <button id="freeBoard_add_btn" onclick="add_free();">+</button>
       </div>
     </div>
-
-      <!-- Modal2 질문게시판 -->
-      <div class="modal fade" id="myModal2" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Modal Header</h4>
-              </div>
-              <div class="modal-body">
-                <p>Some text in the modal.</p>
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-    <!-- Modal3 익명게시판 -->
-    <div class="modal fade" id="myModal3" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h4 class="modal-title">Modal Header</h4>
-          </div>
-          <div class="modal-body">
-            <p>Some text in the modal.</p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-      <!-- Terminal -->
-    <div class="modal fade" id="myTerminal" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h5 class="modal-title">apple - bash - 80x24</h5>
-          </div>
-          <div class="modal-body">
-              <div class = "modal-useful" id = "usemodal">
-              <div class="inner terminal-body">
-            <p>
-                <ul class = "TerminalContents" id = "TerminalList"></ul>
-                <form onsubmit = "query_submit()">
-                apple-ui-MacBook-Pro:~ apple$<input type = "text" name = "TerminalQuery" id = "TerminalQuery">
-              </form>
-            </p>
-            </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  <!--chat Terminal-->
-    <div class="modal fade" id="myChat" role="dialog">
-          <div class="modal-dialog">
-            <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h5 class="modal-title">apple - bash - 80x24</h5>
-              </div>
-              <div class="modal-body">
-                  <div class = "modal-chat" id = "chatmodal">
-                  <div class="inner chat-body">
-                <p>
-                    <ul class = "ChatContents" id = "ChatList"></ul>
-                    <form onsubmit = "chat_submit()">
-                    apple-ui-MacBook-Pro:~ chat$<input type = "text" name = "ChatQuery" id = "ChatQuery">
-                  </form>
-                </p>
-                </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-          <!--xiri -->
-    <div class="modal fade" id="xiri" role="dialog">
-      <div class="modal-dialog">
-        <!-- Modal content-->
-        <div class="modal-content">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h5 class="modal-title">apple - bash - 80x24</h5>
-          </div>
-          <div class="modal-body">
-            <div id="content">
-              <div class="wrap">
-              <div id="result">
-                <span class="final" id="final_span"></span>
-                <span class="interim" id="interim_span"></span>
-              </div>
-              <div id="xiri">
-                <span class="response" id="response"></span>
-              </div>
-              <button id="btn-mic" class="off">마이크 <span></span></button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <div class="container">
+      <div class="container-inside">
+        <table>
+          <thead>
+            <tr>
+              <th>제목</th>
+              <th>작성자</th>
+              <th>날짜</th>
+              <th>태그</th>
+            </tr>
+          </thead>
+          <tbody id ="table1">
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <script>
 
-  var socket = io.connect('http://52.231.67.203:4000');
-  var room_id = "";
-  var user_name = "";
-  window.addEventListener('DOMContentLoaded', function(){
-    var xhr = new XMLHttpRequest();
-    xhr.open("GET", './getInfo', true);
-    xhr.send(null);
-    xhr.onreadystatechange = function() {
-      if (xhr.readyState == XMLHttpRequest.DONE) {
-        var resultJSON = xhr.response;
-        result_obj = JSON.parse(resultJSON);
-        user_name = result_obj.user;
-      }
-    }
-  });
+  <!--Addfreeboard-->
+  <div id="freeBoard_add_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="titleInside">
+      <p>TWOSOMEPLACE</p>
+    </div>
+    <div class="container">
+      <div class="container-inside">
+        제목
+        <form name = "name_form"><textarea rows = "1" id="free_name" name ="free_name"></textarea></form>
+        내용
+        <form name = "contents_form"><textarea rows = "5" id="free_contents" name ="free_contents"></textarea></form>
+        <form name = "freetags"><textarea rows = "1" id="free_tags" name ="free_tags"></textarea></form>
+          <button onclick = "send_free_add();" >전송</button><button onclick = "modify_free();" >수정</button><button onclick = "delete_free();" >수정</button>
+      </div>
+    </div>
+  </div>
 
-  $( "form" ).submit(function( event ) {
-    event.preventDefault();
-  });
-  function query_submit() {
-      let query = document.getElementById("TerminalQuery").value;
-      //console.log(query);
-      let node = document.createElement("li");
-      let textnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$"+query);
-      node.appendChild(textnode);
-      document.getElementById("TerminalList").appendChild(node);
-      document.getElementById("TerminalQuery").value = "";
-      let split_query = query.split(" ");
-      if (split_query[0] === "ls") {
-        let foldernode = document.createElement("li");
-        let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$freshman sophomore junior senior all");
-        foldernode.appendChild(foldertextnode);
-        document.getElementById("TerminalList").appendChild(foldernode);
-      }
-      if (split_query[0] === "vim") {
-          console.log(split_query[1]);
-          room_id = split_query[1];
-          console.log(room_id);
-          socket.emit('join:room', {roomId: room_id});
-          //Post message to server that which channel user selected
-          $('#myTerminal').modal('hide');
-          $('#myChat').modal('show');
-      }
-  }
 
-    $('#myChat').on('show.bs.modal', function () {
-    console.log("get chag");
-    socket.on('send:message', function (data) {
-    let chat_message = document.createElement("li");
-    let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+user_name+"$"+data);
-    chat_message.appendChild(chat_message_text);
-    document.getElementById("ChatList").appendChild(chat_message);
-    });
-  // Get message from server, put the message list on chatlist
-})
+  <div id="freeBoard_detail_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="titleInside">
+      <p>TWOSOMEPLACE</p>
+    </div>
+    <div class="container">
+      <div class="container-inside">
+        <p id = "freetitle"></p>
+        <p id = "freeuser"></p>
+        <p id = "freecontent"></p>
+        <p id = "freetag"></p>
+      </div>
+    </div>
+  </div>
 
-  function chat_submit() {
-      let chat_query = document.getElementById("ChatQuery").value;
-      console.log(document.getElementById("ChatQuery").value);
-      if (chat_query === ':wq') {
-        $('#myTerminal').modal('show');
-        $('#myChat').modal('hide');
-      }
-      socket.emit('send:message', {roomId: room_id, message: chat_query});
-      document.getElementById("ChatQuery").value = "";
-  }
-  $(function() {
-  if (typeof webkitSpeechRecognition != 'function') {
-    alert('Only Works in Chrome Browser');
-    return false;
-  }
+  <!-- Terminal -->
+  <div id="terminal_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="container">
+      <div class="container-inside">
+        <div class="inner terminal-body">
+          <ul class = "TerminalContents" id = "TerminalList"></ul>
+          <form id = "terminalform" onsubmit = "query_submit()">
+          apple-ui-MacBook-Pro:~ apple$<input type = "text" name = "TerminalQuery" id = "TerminalQuery">
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
 
-  var recognition = new webkitSpeechRecognition();
-  var isRecognizing = false;
-  var ignoreOnend = false;
-  var finalTranscript = '';
-  var $btnMic = $('#btn-mic');
- 	var $result = $('#result');
-  recognition.continuous = true;
-  recognition.interimResults = true;
+  <!-- Terminal Chat-->
+  <div id="terminal_chat_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <h1 class="titleInside">TWOSOMEPLACE</h1>
+    <div class="container">
+      <div class="container-inside">
+        <div class="inner chat-body">
+          <ul class = "ChatContents" id = "ChatList"></ul>
+          <form id = "chatform" onsubmit = "chat_submit()">
+          apple-ui-MacBook-Pro:~ chat$<input type = "text" name = "ChatQuery" id = "ChatQuery">
+        </form>
+      </div>
+      </div>
+    </div>
+  </div>
 
-  recognition.onstart = function() {
-    isRecognizing = true;
-    $btnMic.attr('class', 'on');
-    response.innerHTML = '';
-  };
+  <!--Xiri-->
+  
+  <div id="xiri_div" class="window project ui-draggable windows-vis">
+    <nav class="control-window">
+      <a href="#" class="deactive close_btn">"deactive:"</a>
+      <a href="#" class="deactive yellow_btn">"deactive:"</a>
+      <a href="#" class="deactive full_btn">"deactive:"</a>
+    </nav>
+    <div class="titleInside">
+      <p>TWOSOMEPLACE</p>
+    </div>
+    <div class="container">
+      <div class="container-inside">
+        <div id="result">
+          <span class="final" id="final_span"></span>
+          <span class="interim" id="interim_span"></span>
+        </div>
+        <div id="xiri">
+          <span class="response" id="response"></span>
+        </div>
+        <button id="btn-mic" class="off">마이크 <span></span></button>
+      </div>
+    </div>
+  </div>
 
-  recognition.onend = function() {
-    isRecognizing = false;
-    if (ignoreOnend) {
-      return false;
-    }
 
-    // DO end process
-    $btnMic.attr('class', 'off');
-    if (!finalTranscript) {
-      return false;
-    }
-
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-      var range = document.createRange();
-      range.selectNode(document.getElementById('final-span'));
-      window.getSelection().addRange(range);
-    }
-
-  };
-
-  recognition.onresult = function(event) {
-    var interimTranscript = '';
-    if (typeof(event.results) == 'undefined') {
-      recognition.onend = null;
-      recognition.stop();
-      return;
-    }
-
-    for (var i = event.resultIndex; i < event.results.length; ++i) {
-      if (event.results[i].isFinal) {
-        finalTranscript += event.results[i][0].transcript;
-      } else {
-        interimTranscript += event.results[i][0].transcript;
-      }
-    }
-
-    finalTranscript = capitalize(finalTranscript);
-    final_span.innerHTML = linebreak(finalTranscript);
-    interim_span.innerHTML = linebreak(interimTranscript);
-    fireCommand(finalTranscript);
-  };
-
-  function textToSpeech(text) {
-    speechSynthesis.speak(new SpeechSynthesisUtterance(text));
-  }
-
-  function fireCommand(string) {
-    if (string.endsWith('알람') || string.endsWith('알 람')) {
-  		alert('알람');
-  	}
-    else if (string.endsWith('안녕') || string.endsWith('안 녕')) {
-      response.innerHTML = "안녕하세요";
-      textToSpeech($('#response').text());
-    }
-    else if (string.endsWith('누구야') || string.endsWith('넌 누구야') || string.endsWith('넌 누 구 야')) {
-      response.innerHTML = "안녕하세요 저는 Xiri에요";
-  	  textToSpeech('안녕하세요 저는 Xiri에요');
-  	}
-  }
-
-  recognition.onerror = function(event) {
-    if (event.error == 'no-speech') {
-      ignoreOnend = true;
-    } else if (event.error == 'not-allowed') {
-      ignoreOnend = true;
-    }
-
-    $btnMic.attr('class', 'off');
-  };
-
-  var two_line = /\n\n/g;
-  var one_line = /\n/g;
-  var first_char = /\S/;
-
-  function linebreak(s) {
-    return s.replace(two_line, '<p></p>').replace(one_line, '<br>');
-  }
-
-  function capitalize(s) {
-    return s.replace(first_char, function(m) {
-      return m.toUpperCase();
-    });
-  }
-
-  function start(event) {
-    if (isRecognizing) {
-      recognition.stop();
-      return;
-    }
-    recognition.lang = 'ko-KR';
-    recognition.start();
-    ignoreOnend = false;
-
-    finalTranscript = '';
-    final_span.innerHTML = '';
-    interim_span.innerHTML = '';
-  }
-
-  function requestServer() {
-    $.ajax({
-      method: 'post',
-      url: 'https://www.google.com/speech-api/v2/recognize?output=json&lang=en-us&key=AIzaSyDiMqfg8frtoZflA_2LPqfGdpjmgTMgWhg',
-      data: '/examples/speech-recognition/hello.wav',
-      contentType: 'audio/l16; rate=16000;', // 'audio/x-flac; rate=44100;',
-      success: function(data) {
-      },
-      error: function(xhr) {
-      }
-    });
-  }
-  $btnMic.click(start);
-});
-
-/*  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", "http://52.231.67.203:4000/board", true);
-  xmlHttp.setRequestHeader('Access-Control-Allow-Origin', '*');
-  xmlHttp.onreadystatechange = function() {
-    if (xmlHttp.readyState == 4 && (xmlHttp.status == 200 || xmlHttp.stats == 201)) {
-      var table = JSON.parse(xmlHttp.response);
-    }
-  }
-*/
-  </script>
+  <div class="bottom">
+    <div class="bottom-nav">
+      <div class="bottom-content">
+        <img class="bottom_icon" src="/images/finder.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/launchpad.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/safari.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/mail.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/phonebook.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/calendar.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/memo.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/map.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/message.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/pictures.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/miri.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/pages.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/numbers.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/keynote.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/setting.png" width="70" height="70" />
+        <img id="terminal_" class="bottom_icon" src="/images/terminal.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/calculator.png" width="70" height="70" />
+        <img class="bottom_icon" src="/images/appstore.png" width="70" height="70" />
+      </div>
+    </div>
+  </div>
   </body>
-
-<style>
-body {
-  background : url("/images/background.jpg") no-repeat center center fixed;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-}
-ul.TerminalContents, ul.ChatContents {
-    list-style: none;
-    margin: 0px;
-    padding: 0px;
-    font-family: 'monaco';
-}
-#TerminalQuery, #ChatQuery {
-  border: none;
-  outline: none;
-  background-color: transparent;
-}
-
-.modal-useful, .modal-chat {
-    font-family: 'monaco';
-}
-
-.button {
-    font-family: 'sambong';
-}
-#result {
-  margin-bottom: 20px; padding: 10px 20px; height: 150px;
-  border: solid 1px #000; border-radius: 6px;
-}
-#result span { line-height: 1.5; }
-#xiri {
-	margin-bottom: 20px; padding: 10px 20px; height: 150px;
-	border: solid 1px #000; border-radius: 6px;
-}
-#xiri span { line-height: 1.5; }
-#btn-mic { text-align: center; min-width: 160px;}
-#btn-mic span {
-	display: inline-block; margin: 1px 0 0 5px; width: 10px; height: 10px;
-	border: solid 1px #fff; background: #bbb; border-radius: 50%;
-}
-#btn-mic.on span { background: rgb(219, 30, 16); }
-ul li { font-size: 1em; }
-
-.visible { display: block !important; }
-
-@font-face {
-    font-family: 'monaco';
-    src: url('monaco-webfont.ttf') format('truetype'),
-        url('monaco-webfont.woff') format('woff');
-    font-family: 'sambong';
-    src: url('sambongfont.ttf') format('truetype'),
-        url('sambongfont.woff') format('woff');
-}
-</style>
 
 </html>

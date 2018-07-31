@@ -14,27 +14,12 @@ router.get('/', function(req, res, next) {
 
 /* GET users listing. */
 router.post('/signup', asyncMiddleware(async function(req, res, next) {
-  let usernameRegex = /^[a-z0-9]+$/;
   var id = req.body.id;
   var password = req.body.password;
   var nickname = req.body.nickname;
 
-  if(!usernameRegex.test(id)){
-    return res.status(400).json({
-      error: "BAD USERNAME",
-      code: 1
-    });
-  }
-
-  if(password.length < 4 || typeof password !== "string"){
-    return res.status(400).json({
-      error: "BAD PASSWORD",
-      code: 2
-    });
-  }
   var ret = await db.SignUp(id, password, nickname);
-  console.log(ret)
-  res.redirect('/users')
+  res.json(ret);
 }));
 
 router.post('/signin', asyncMiddleware(async function(req, res, next) {

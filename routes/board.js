@@ -7,17 +7,82 @@ const asyncMiddleware = fn => (req, res, next) => {
     .catch(next);
 }
 
-router.get('/', asyncMiddleware(async function(req, res, next) {
+router.post('/', asyncMiddleware(async function(req, res, next) {
   var board_id = req.body.board_id;
   var ret = await db.LoadBoard(board_id);
-  console.log(ret);
+  res.json(ret);
 }));
 
 router.post('/search', asyncMiddleware(async function(req, res, next) {
   var board_id = req.body.board_id;
   var keyword = req.body.keyword;
   var ret = await db.LoadBoardSearch(board_id, keyword);
-  console.log(ret);
+  res.json(ret);
+}));
+
+router.post('/contents', asyncMiddleware(async function(req, res, next) {
+  console.log("wow");
+  var board_id = req.body.board_id;
+  var user_id = req.body.user_id;
+  var title = req.body.title;
+  var contents_text = req.body.contents_text;
+  var tag_text = req.body.tags;
+  var ret = await db.newContent(board_id, user_id, title, contents_text, tag_text);
+  console.log("success");
+  res.json(ret);
+}));
+
+router.post('/contetns/anonym', asyncMiddleware(async function(req, res, next) {
+  var board_id = req.body.board_id;
+  var user_name = req.body.user_name;
+  var title = req.body.title;
+  var contents_text = req.body.contents_text;
+  var password = req.body.password;
+  var tag_text = req.body.tag_text;
+  var ret = await db.newAnonymContent(board_id, user_name, title, contents_text, password, tag_text);
+  res.json(ret);
+
+}))
+
+router.post('/contents/edit', asyncMiddleware(async function(req, res, next) {
+  var contents_id = req.body.contents_id;
+  var user_id = req.body.user_id;
+  var title = req.body.title;
+  var contents_text = req.body.contents_text;
+  var tag_text = req.body.tags;
+  var ret = await db.editContent(contents_id, user_id, title, contents_text, tag_text);
+  res.json(ret);
+}))
+
+router.post('/contents/delete', asyncMiddleware(async function(req, res, next) {
+  var contents_id = req.body.contents_id;
+  var user_id = req.body.user_id;
+  var ret = await db.deleteContent(contents_id, user_id);
+  res.json(ret);
+}))
+
+router.post('/contents/anonym/confirm', asyncMiddleware(async function(req, res, next) {
+  var password = req.body.password;
+  var contents_id = req.body.contents_id;
+  var ret = await db.pwConfirm(password, contents_id);
+  res.json(ret);
+}))
+
+router.post('/contents/anonym/edit', asyncMiddleware(async function(req, res, next) {
+  var contents_id = req.body.contents_id;
+  var password = req.body.password;
+  var title = req.body.title;
+  var contents_text = req.body.contents_text;
+  var tag_text = req.body.tags;
+  var ret = await db.editAnonymContent(contents_id, password, title, contents_text, tag_text);
+  res.json(ret);
+}))
+
+router.post('/detail', asyncMiddleware(async function(req, res, next) {
+ var contents_id = req.body.contents_id;
+ var board_id = req.body.board_id;
+ var ret = await db.showDetail(contents_id, board_id);
+ res.json(ret);
 }));
 
 module.exports = router;

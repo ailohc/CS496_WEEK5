@@ -1,35 +1,338 @@
+
+html, body {
+	font-family: "sambong", "Lucida Grande", "Lucida Sans Unicode", sans-serif;
+	width:100%;
+	height:100%;
+	overflow:hidden;
+	margin:0;
+	padding:0;
+	background:#000;
+	-webkit-user-select:none;
+	-moz-user-select:none;
+	user-select:none;
+}
+
+
+.topnav {
+  background-color: rgb(242, 242, 242, 0.75);
+  overflow: hidden;
+  opacity: 0.95;
+  height: 25px;
+  filter: blur(0.01px);
+  overflow: hidden;
+  font-family: 'sambong';
+}
+
+.topnav .topnav-left {
+    float: left;
+    text-align: center;
+    padding: 0 15px;
+    font-size: 13px;
+}
+#apple_logo {
+  margin-top: 2px;
+}
+
+#list_logo, #siri_icon {
+  margin-top: 2.5px;
+  margin-right: 10px;
+}
+
+#search_icon {
+  margin-left : 25px;
+  margin-right : 10px;
+}
+
+#time {
+  padding-top: 10;
+  font-size: 15px;
+}
+
+.title {
+  margin-top: 4px;
+  font-weight: 800;
+}
+
+.item{
+    margin-top: 4px;
+}
+
+.topnav-right {
+  float: right;
+  text-align: center;
+  padding: 0 15px;
+  font-size: 13px;
+}
+
+.bottom {
+  overflow: hidden;
+  position: fixed;
+  bottom: 0;
+  margin: auto;
+  width: 100%;
+  height: 90px;
+}
+
+.bottom-nav{
+  border-radius: 10px 10px 0px 0px;
+  /* filter: blur(0.1px); */
+  width: 1340px;
+  height:100%;
+  margin: 0 auto;
+  background-color: rgb(150,150,150,0.7);
+}
+
+.bottom-content{
+  padding-top:15px;
+}
+
+.bottom_icon {
+    position: relative;
+}
+
+#mySelect {
+    display: inline-block;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    margin-left: 10px;
+}
+
+.dropdown-content {
+    position: absolute;
+    background-color: rgba(255,255,255,0.6);
+    min-width: 250px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    border-radius: 0px 0px 5px 5px;
+}
+
+.dropdown-content a {
+    font-family: 'sambong';
+    color: black;
+    padding: 12px 16px;
+    height:30px;
+    font-size: 13px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content .border_btm {
+  border-bottom: 1px solid rgb(200, 200, 200);
+}
+.window {
+  border-radius: 5px;
+  text-align: left;
+  position:absolute;
+	z-index:0;
+	visibility:hidden;
+	opacity:0;
+}
+.window.windows-vis {
+	visibility:visible;
+	opacity:1;
+}
+.container {
+	position:relative;
+	padding: 0;
+	background-color: white;
+}
+.container-inside {
+	position:relative;
+	padding:20px 30px;
+	text-align:center;
+}
+
+#project {
+	left: 370px;
+	overflow: hidden;
+	width: auto;
+	height: auto;
+}
+
+/* nav.control-window a:before {
+    content: '';
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+}
+nav.control-window a:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 2px;
+    left: 1px;
+    bottom: 1px;
+    right: 1px;
+    border-radius: 100%;
+    background: -webkit-linear-gradient(white, rgba(255, 255, 255, .9) 2%, white, rgba(255, 255, 255, .4) 16%, rgba(255, 255, 255, 0) 43%, rgba(255, 255, 255, .74), rgba(255, 255, 255, .7) 122%, rgba(255, 255, 255, .7));
+	background: -moz-linear-gradient(white, rgba(255, 255, 255, .9) 2%, white, rgba(255, 255, 255, .4) 16%, rgba(255, 255, 255, 0) 43%, rgba(255, 255, 255, .74), rgba(255, 255, 255, .7) 122%, rgba(255, 255, 255, .7));
+    box-shadow: inset 0px -3px -5px 3px rgba(255, 255, 255, 0.2), inset 0px 2px -5px 3px rgba(255, 255, 255, 0.2);
+} */
+h1.titleInside {
+	background-color: rgb(215, 215, 215,0.99);
+	height: 30px;
+    position:relative;
+    z-index:2;
+    margin:0;
+	color:black;
+	font-size:13px;
+	line-height:21px;
+	text-decoration:none;
+	text-shadow: 0 1px 1px #e7e7e7;
+	text-align:center;
+	text-transform:capitalize;
+}
+
+nav.control-window {
+	position:absolute;
+	left:5px;
+	top:3px;
+	z-index:10;
+	height:19px;
+}
+.container-inside {
+	position:relative;
+	padding:20px 30px;
+	text-align:center;
+}
+nav.control-window a {
+    display: inline-block;
+    margin: 2px 0px 3px 1px;
+    width: 12px;
+    height: 12px;
+    border-radius: 100%;
+    box-shadow: 0px 1px 0px rgba(255,255,255,.5);
+    text-indent: -9999px;
+    position: relative;
+}
+.container-inside h2 {
+	color:#000;
+	font-size:13px;
+	font-weight:bold;
+	line-height:13px;
+	margin-bottom:15px;
+}
+.container-inside img {
+	margin:0 0 10px 0;
+}
+
+#project .about-this p:first-child, #spec .about-this p:first-child {
+	color:#848484;
+	font-size:12px;
+	font-weight:bold;
+	margin:0 0 10px 0;
+}
+#project .about-this p {
+	margin:15px 0;
+	font-size:10px;
+	line-height:14px;
+}
+#project .container-inside .about-this, #spec .container-inside .about-this {
+	margin-bottom:0px;
+}
+
+.yellow_btn {
+	background-color:yellow;
+}
+
+.close_btn{
+	background-color:red;
+}
+
+.full_btn{
+	background-color: green;
+}
 body {
-    background : url("/images/background.jpg") no-repeat center center fixed;
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
-  }
-  ul.TerminalContents, ul.ChatContents {
-      list-style: none;
-      margin: 0px;
-      padding: 0px;
-      font-family: 'monaco';
-  }
-  #TerminalQuery, #ChatQuery {
-    border: none;
-    outline: none;
-    background-color: transparent;
-  }
-  
-  .modal-useful, .modal-chat {
-      font-family: 'monaco';
-  }
-  
-  .button {
-      font-family: 'sambong';
-  }
-  
-  @font-face {
-      font-family: 'monaco';
-      src: url('monaco-webfont.ttf') format('truetype'),
-          url('monaco-webfont.woff') format('woff');
-      font-family: 'sambong';
-      src: url('sambongfont.ttf') format('truetype'),
-          url('sambongfont.woff') format('woff');
-  }
+  background : url("/images/background.jpg") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+ul.TerminalContents, ul.ChatContents {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'monaco';
+}
+#TerminalQuery, #ChatQuery {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+.modal-useful, .modal-chat {
+    font-family: 'monaco';
+}
+
+.button {
+    font-family: 'sambong';
+}
+.modal-header {
+  padding: 0px;
+  margin: 0px;
+  background: -webkit-linear-gradient(top, rgba(255,255,255,1) 0%,rgba(229,229,229,1) 100%);
+}
+.modal-body {
+  padding: 0px;
+  margin: 0px;
+  top: 0px;
+  bottom: 0px;
+}
+.modal-dialog {
+  position: relative;
+  display: table;
+  width: 500px;
+  min-width: 400px;
+  height:60%;
+  overflow-y: initial !important
+}
+.modal-content {
+  height: 60%;
+  overflow-y: auto;
+}
+#terminalform {
+  height: 0px;
+}
+#chatform {
+  height: 0px;
+}
+.modal-backdrop {
+    background-color: rgba(0,0,0,.0001) !important;
+}
+
+::-webkit-scrollbar-track
+{
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+	border-radius: 10px;
+	background-color: rgba(0,0,0,0);
+}
+
+::-webkit-scrollbar
+{
+	width: 8px;
+	background-color: rgba(0,0,0,0);
+}
+::-webkit-scrollbar-thumb
+{
+	border-radius: 8px;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+	background-color: rgba(32, 28, 23, 0.4);
+}
+
+
+
+@font-face {
+    font-family: 'monaco';
+    src: url('monaco-webfont.ttf') format('truetype'),
+        url('monaco-webfont.woff') format('woff');
+    font-family: 'sambong';
+    src: url('sambongfont.ttf') format('truetype'),
+        url('sambongfont.woff') format('woff');
+}

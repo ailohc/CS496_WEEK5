@@ -16,6 +16,7 @@ var socket_io    = require( "socket.io" );
 var io           = socket_io();
 app.io           = io;
 
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.engine('html', require('ejs').renderFile);
@@ -34,6 +35,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors());
+
+app.use(function(req,res,next) {
+    if(req.headers["x-forwarded-proto"] == "http") {
+        res.redirect("https://sambong.koreacentral.cloudapp.azure.com" + req.url, next);
+    } else {
+        return next();
+    }
+});
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -65,5 +74,6 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
 
 module.exports = app;
