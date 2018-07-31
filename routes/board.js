@@ -50,7 +50,7 @@ router.post('/contetns/anonym', asyncMiddleware(async function(req, res, next) {
   var title = req.body.title;
   var contents_text = req.body.contents_text;
   var password = req.body.password;
-  var tag_text = req.body.tag_text;
+  var tag_text = req.body.tags;
   var ret = await db.newAnonymContent(board_id, user_name, title, contents_text, password, tag_text);
   res.json(ret);
 }));

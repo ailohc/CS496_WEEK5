@@ -390,6 +390,36 @@ ul.TerminalContents, ul.ChatContents {
 	font-size: 13px;
 }
 
-.folder {
-	position: absoulte;
+
+#xiri_div {
+	max-width:400px;
+	max-height:200px;
+	width:100%;
+	height:100%;
+	position:absolute;
+	top: 40px;
+	right: 0px;
+	background: rgba(51, 50, 50, 0.7);
+	border-radius: 5px;
+	z-index: 5000;
+	margin-right: 25px;
 }
+
+#xiri_div #result{
+	font-size: 18px;
+	font-weight: bold;
+	color: white;
+	display:block;
+}
+
+.folder {
+	position: relative;
+}
+
+.folder p{
+	color: white;
+	font-size: 11.6px;
+	font-weight: bold;
+}
+
+.

@@ -31,6 +31,7 @@ function printClock() {
 function show_freeboard () {
   $('#freeBoard_div').show(function(){
     board = 1;
+    $(this).css({'z-index': ++z_index_increment});
     var first_tb = document.getElementById("table1");
     first_tb.innerHTML = "";
     var dataJSON = {"board_id": 1}
@@ -120,6 +121,7 @@ function show_freeboard () {
   function show_question () {
     $('#question_div').show(function(){
       board = 2;
+      $(this).css({'z-index': ++z_index_increment});
       var first_tb = document.getElementById("table2");
       first_tb.innerHTML = "";
       var dataJSON = {"board_id": 2}
@@ -179,10 +181,10 @@ function show_freeboard () {
         }
       }
     }
-  
+
 
     function show_questioncomments() {
-      document.getElementById("QuestionCommentsList").innerHTML = "";
+      document.getElementById("questionCommentsList").innerHTML = "";
       var dataJSON = {contents_id : question_id};
       var data = JSON.stringify(dataJSON);
       var xmlHttp1 = new XMLHttpRequest();
@@ -199,9 +201,9 @@ function show_freeboard () {
             var comment_date_string = result[i].created_at.split("T");
             var comment_date = comment_date_string[0];
             var li = document.createElement("div");
-            li.className = "QuestionCommentsList"
-            li.innerHTML = "<span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+"</span> - <span id = 'QuestionCommentText' class = 'QuestionCommentText'>"+comment_text+"</span> - <span id = 'QuestionCommentUser' class = 'QuestionCommentUser'>"+comment_user+"</span><span id = 'QuestionCommentDate' class = 'QuestionCommentDate'>"+comment_date+"</span><button id= 'QuestionCommentDelete' class = 'QuestionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
-            document.getElementById("QuestionCommentsList").appendChild(li);
+            li.className = "questionCommentsElement"
+            li.innerHTML = "<span id = 'questionCommentText' class = 'questionCommentText'>"+comment_text+"</span> - <span id = 'questionCommentUser' class = 'questionCommentUser'>"+comment_user+"</span><span id = 'questionCommentDate' class = 'questionCommentDate'>"+comment_date+"</span><button id= 'questionCommentDelete' class = 'questionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
+            document.getElementById("questionCommentsList").appendChild(li);
           }
         }
       }
@@ -211,6 +213,7 @@ function show_freeboard () {
     function show_anomboard () {
       $('#anonymous_div').show(function(){
         board = 3;
+        $(this).css({'z-index': ++z_index_increment});
         var first_tb = document.getElementById("table3");
         first_tb.innerHTML = "";
         var dataJSON = {"board_id": 3}
@@ -243,6 +246,7 @@ function show_freeboard () {
 
 window.onload = function() {
   var xhr = new XMLHttpRequest();
+  var z_index_increment = 10;
   xhr.open("GET", './getInfo', true);
   xhr.send(null);
   xhr.onreadystatechange = function() {
@@ -267,12 +271,12 @@ window.onload = function() {
   $('#questionBoard_detail_div').hide();
   // printClock();
   $('.window').draggable();
+  $('.folder').draggable();
   $(".dropdown").hide();
 
   $( "form" ).submit(function( event ) {
     event.preventDefault();
   });
-  var z_index_increment = 10;
   $('.window').on("click", function(e){
     e.preventDefault();
     $(this).css('z-index', z_index_increment++);
@@ -293,6 +297,10 @@ $("#dropdown").click(function(e){
     }, {
       duration: 200,
       complete : function() {
+        $('#terminal_div').show(function(){
+          $('#terminal_div').css({'z-index' : ++z_index_increment});
+          $('#TerminalQuery').focus();
+        });
         $img.animate({
           top : "+=30"
         })
@@ -338,16 +346,15 @@ $("#dropdown").click(function(e){
 // -------------------------------------------------------------------------------
 
 
-$('#terminal_btn').on("click", function(e){
+$('#terminal_').on("click", function(e){
   e.preventDefault();
-  $('#terminal_div').show(function(){
-    $('#TerminalQuery').focus();
-  });
 })
 
-$('#xiri_btn').on("click", function(e){
+$('#siri_icon').on("click", function(e){
   e.preventDefault();
-  $('#xiri_div').show();
+  $('#xiri_div').show('slide', {
+    direction : "right"
+  }, 1000);
 })
 
 $('#terminal_div .close_btn').on("click", function(e){
@@ -367,7 +374,9 @@ $('#freeBoard_btn').on("dblclick", function(e){
 
 $('#freeBoard_add_btn').on("click", function(e){
   e.preventDefault();
-  $('#freeBoard_add_div').show();
+  $('#freeBoard_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 })
 
 $('#freeBoard_add_div .close_btn').on("click", function(e) {
@@ -425,6 +434,7 @@ $('#questionBoard_detail_div .close_btn').on("click", function(e){
   e.preventDefault();
   $('#questionBoard_detail_div').hide();
 })
+
 //---------------------------------------------------------------------------------------------
 
 $('#search_input1').on("keydown", function(e){
@@ -702,6 +712,7 @@ function query_submit() {
       socket.emit('join:room', {roomId: room_id});
       $('#terminal_div').hide();
       $('#terminal_chat_div').show(function(){
+        $(this).css({'z-index': ++z_index_increment});
         console.log("get chag");
         socket.on('send:message', function (data) {
         let chat_message = document.createElement("li");
@@ -733,6 +744,7 @@ function chat_submit() {
   if (chat_query === ':wq') {
     $('#terminal_chat_div').hide();
     $('#terminal_div').show(function(){
+      $(this).css({'z-index': ++z_index_increment});
       $('#TerminalQuery').focus();
     });
   }
@@ -742,12 +754,16 @@ function chat_submit() {
 
 function add_free() {
   $('#freeBoard_div').hide();
-  $('#freeBoard_add_div').show();
+  $('#freeBoard_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 }
 
 function add_question() {
   console.log("aaaaaaaaa");
-  $('#question_add_div').show();
+  $('#question_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 }
 
 //------------------------------------for free board
@@ -771,7 +787,9 @@ function send_free_add () {
 
 function detail1(elem_id1) {
   $('#freeBoard_div').hide();
-  $('#freeBoard_detail_div').show();
+  $('#freeBoard_detail_div').show( function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
   free_id = elem_id1;
   console.log(elem_id1);
   var dataJSON = {"board_id" : board, "contents_id" : elem_id1};
@@ -827,7 +845,9 @@ function modify_free() {
   document.name_form.free_name.value = modify_free_title;
   document.contents_form.free_contents.value = modify_free_content;
   document.freetags.free_tags.value = modify_free_tag;
-  $('#freeBoard_add_div').show();
+  $('#freeBoard_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 }
 
 function send_free_modify () {
@@ -881,7 +901,9 @@ function Delete_free_comments(comment_id1) {
     result_obj = JSON.parse(resultJSON);
     show_freecomments();
     $('#freeBoard_detail_div').hide();
-    $('#freeBoard_detail_div').show();
+    $('#freeBoard_detail_div').show(function(){
+      $(this).css({'z-index': ++z_index_increment});
+    });
     show_free_side();
   }
 }
@@ -905,7 +927,9 @@ function send_question_add () {
 }
 
 function detail2(elem_id2) {
-  $('#questionBoard_detail_div').show();
+  $('#questionBoard_detail_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
   question_id = elem_id2;
   console.log(elem_id2);
   var dataJSON = {"board_id" : board, "contents_id" : elem_id2};
@@ -926,7 +950,7 @@ function detail2(elem_id2) {
     }
     show_question_side();
   }
-  show_questioncomments();
+  //show_questioncomments();
 }
 
 function delete_question() {
@@ -946,7 +970,7 @@ function delete_question() {
       //$('#questionBoard_detail_div').hide();
       show_question();
       show_question_side();
-      show_questioncomments();
+      //show_questioncomments();
     } else {
       alert("Failed To Delete!");
     }
@@ -964,7 +988,9 @@ function modify_question() {
   document.question_name_form.question_name.value = modify_question_title;
   document.question_contents_form.question_contents.value = modify_question_content;
   document.question_tags.question_tags.value = modify_question_tag;
-  $('#question_add_div').show();
+  $('#question_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 }
 
 function send_question_modify () {
@@ -986,7 +1012,7 @@ function send_question_modify () {
       document.question_tags.question_tags.value ="";
       show_question_side();
       show_question();
-      show_questioncomments();
+      //show_questioncomments();
     } else {
       alert("Failed To Edit!");
     }
@@ -1003,26 +1029,5 @@ function send_question_comment () {
   xhr1.send(data);
   document.getElementById("question_comments").value = "";
   document.getElementById("question_comments_title").value = "";
-  show_questioncomments();
-}
-
-function Delete_question_comments(comment_id2) {
-  var dataJSON = {"comment_id" : comment_id2, "user_id" : user_id};
-  var data = JSON.stringify(dataJSON);
-  var xhr1 = new XMLHttpRequest();
-  xhr1.open("POST", "/board/comments/prob/delete", true);
-  xhr1.setRequestHeader("Content-Type", "application/json");
-  xhr1.send(data);
-  xhr1.onreadystatechange = function() {
-    if (xhr1.readyState == XMLHttpRequest.DONE) {
-    document.getElementById("question_comments").value = "";
-    document.getElementById("question_comments_title").value = "";
-    var resultJSON = xhr1.response;
-    result_obj = JSON.parse(resultJSON);
-    show_questioncomments() 
-    $('#questionBoard_detail_div').hide();
-    $('#questionBoard_detail_div').show();
-    //show_questioncomments() 
-  }
-}
+  //show_questioncomments();
 }
