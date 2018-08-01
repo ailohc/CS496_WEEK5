@@ -293,7 +293,7 @@ let pwConfirm = (password, contents_id) => {
           resolve(result);
         }
         else {
-          reolve({'message' : 'Wrong password'});
+          resolve({'message' : 'Wrong password'});
         }
       }
     })

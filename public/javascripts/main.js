@@ -6,6 +6,9 @@ var board = "";
 var free_id = "";
 var question_id = "";
 var anom_id = "";
+var free_flag = "";
+var question_flag = "";
+var anom_flag = "";
 var z_index_increment = 10;
 
 function printClock() {
@@ -212,94 +215,94 @@ function show_freeboard () {
       xmlHttp1.send(data);
     }
 
-    function show_anomboard () {
-      $('#anonymous_div').show(function(){
-        board = 3;
-        $(this).css({'z-index': ++z_index_increment});
-        var first_tb = document.getElementById("table3");
-        first_tb.innerHTML = "";
-        var dataJSON = {"board_id": 3}
-        var data = JSON.stringify(dataJSON);
-        var xmlHttp1 = new XMLHttpRequest();
-        xmlHttp1.open("POST", "/board/load/anonym", true);
-        xmlHttp1.setRequestHeader("Content-Type", "application/json");
-        xmlHttp1.send(data);
-        xmlHttp1.onreadystatechange = function() {
-          console.log("success3");
-          if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
-            var result = JSON.parse(xmlHttp1.responseText);
-            for (var i in result) {
-              console.log(result[i].id);
-              var elem_id1 = result[i].id;
-              var title = result[i].title;
-              var writer = result[i].user_name;
-              var string_data = result[i].created_at.split("T");
-              var date = string_data[0];
-              var tag = result[i].tag_text;
-              var obj = document.getElementById("table3");
-              var divAppend = document.createElement("tr");
-              divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
-              obj.appendChild(divAppend);
-            }
-          }
+function show_anomboard () {
+  $('#anonymous_div').show(function(){
+    board = 3;
+    $(this).css({'z-index': ++z_index_increment});
+    var first_tb = document.getElementById("table3");
+    first_tb.innerHTML = "";
+    var dataJSON = {"board_id": 3}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("POST", "/board/load/anonym", true);
+    xmlHttp1.setRequestHeader("Content-Type", "application/json");
+    xmlHttp1.send(data);
+    xmlHttp1.onreadystatechange = function() {
+      console.log("success3");
+      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp1.responseText);
+        for (var i in result) {
+          console.log(result[i].id);
+          var elem_id1 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].user_name;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("table3");
+          var divAppend = document.createElement("tr");
+          divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+          obj.appendChild(divAppend);
         }
-      });
       }
+    }
+  });
+  }
 
-      function show_anom_side() {
+  function show_anom_side() {
+    document.getElementById("detail-list-area-anom").innerHTML = "";
+    var dataJSON = {"board_id" : 3};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "/board/load/anonym", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.send(data);
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
         document.getElementById("detail-list-area-anom").innerHTML = "";
-        var dataJSON = {"board_id" : 3};
-        var data = JSON.stringify(dataJSON);
-        var xmlHttp3 = new XMLHttpRequest();
-        xmlHttp3.open("POST", "/board/load/anonym", true);
-        xmlHttp3.setRequestHeader("Content-Type", "application/json");
-        xmlHttp3.send(data);
-        xmlHttp3.onreadystatechange = function() {
-          if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
-            var result = JSON.parse(xmlHttp3.responseText);
-            document.getElementById("detail-list-area-anom").innerHTML = "";
-            for (var i in result) {
-              var elem_id3 = result[i].id;
-              var title = result[i].title;
-              var writer = result[i].user_name;
-              var string_data = result[i].created_at.split("T");
-              var date = string_data[0];
-              var tag = result[i].tag_text;
-              var obj = document.getElementById("detail-list-area-anom");
-              var divAppend = document.createElement("div");
-              divAppend.className = "detail-list-item-anom";
-              divAppend.innerHTML = "<p onclick = 'detail3("+elem_id3+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
-              obj.appendChild(divAppend);
-            }
-          }
+        for (var i in result) {
+          var elem_id3 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].user_name;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("detail-list-area-anom");
+          var divAppend = document.createElement("div");
+          divAppend.className = "detail-list-item-anom";
+          divAppend.innerHTML = "<p onclick = 'detail3("+elem_id3+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          obj.appendChild(divAppend);
         }
       }
+    }
+  }
 
-      function show_anomcomments() {
-        document.getElementById("AnomCommentsList").innerHTML = "";
-        var dataJSON = {contents_id : anom_id};
-        var data = JSON.stringify(dataJSON);
-        var xmlHttp3 = new XMLHttpRequest();
-        xmlHttp3.open("POST", "board/comments/anonym/load", true);
-        xmlHttp3.setRequestHeader("Content-Type", "application/json");
-        xmlHttp3.onreadystatechange = function() {
-          if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
-            var result = JSON.parse(xmlHttp3.responseText);
-            for (var i in result) {
-              var comment_id3 = result[i].id;
-              var comment_user = result[i].user_name;
-              var comment_text = result[i].comment_text;
-              var comment_date_string = result[i].created_at.split("T");
-              var comment_date = comment_date_string[0];
-              var li = document.createElement("div");
-              li.className = "AnomCommentsElement"
-              li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'Delete_anom_comments("+comment_id3+");'>삭제</button>";
-              document.getElementById("AnomCommentsList").appendChild(li);
-            }
-          }
+  function show_anomcomments() {
+    document.getElementById("AnomCommentsList").innerHTML = "";
+    var dataJSON = {contents_id : anom_id};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "board/comments/anonym/load", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
+        for (var i in result) {
+          var comment_id3 = result[i].id;
+          var comment_user = result[i].user_name;
+          var comment_text = result[i].comment_text;
+          var comment_date_string = result[i].created_at.split("T");
+          var comment_date = comment_date_string[0];
+          var li = document.createElement("div");
+          li.className = "AnomCommentsElement"
+          li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'check_com_pw(" + comment_id3 + ");'>삭제</button>";
+          document.getElementById("AnomCommentsList").appendChild(li);
         }
-        xmlHttp3.send(data);
       }
+    }
+    xmlHttp3.send(data);
+  }
 
 
 
@@ -1180,6 +1183,54 @@ function delete_anom() {
       }
       else {
       alert("Failed To Delete!");
+      }
+    }
+  }
+}
+
+function check_pw(option) {
+  var pw = prompt("비밀번호 확인", "");
+  var dataJSON = {"password" : pw, "contents_id" : anom_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/contents/anonym/confirm", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      console.log(resultJSON);
+      result_obj = JSON.parse(resultJSON);
+      if (result_obj.message !== 'Wrong password') {
+        if (option === 1)
+          modify_anom();
+        else if (option === 2)
+          delete_anom();
+      }
+      else {
+        alert("Wrong password");
+      }
+    }
+  }
+}
+
+function check_com_pw(comment_id3) {
+  var pw = prompt("비밀번호 확인", "");
+  var dataJSON = {"password" : pw, "comments_id" : comment_id3};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/comments/anonym/confirm", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      if (result_obj.message !== 'Wrong password') {
+        Delete_anom_comments(comment_id3);
+      }
+      else {
+        alert("Wrong password");
       }
     }
   }
