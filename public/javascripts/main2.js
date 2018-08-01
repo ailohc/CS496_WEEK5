@@ -1,9 +1,25 @@
-var socket = io.connect('https://sambong.koreacentral.cloudapp.azure.com:443');
+var socket = "";
 var room_id = "";
 var user_name = "";
 var user_id = "";
 var board = "";
 var free_id = "";
+var question_id = "";
+var anom_id = "";
+var free_flag = "";
+var question_flag = "";
+var anom_flag = "";
+var room = ["freshman", "sophomore", "junior", "senior" ,"all"];
+var z_index_increment = 10;
+var freetagsarray = "";
+var questiontagsarray = "";
+var anomtagsarray = "";
+
+function turn_off() {
+  window.open('', '_self', '');
+  window.close();
+  return false;
+}
 
 function printClock() {
   var seoul = moment().tz("Asia/Seoul");
@@ -30,6 +46,7 @@ function printClock() {
 function show_freeboard () {
   $('#freeBoard_div').show(function(){
     board = 1;
+    $(this).css({'z-index': ++z_index_increment});
     var first_tb = document.getElementById("table1");
     first_tb.innerHTML = "";
     var dataJSON = {"board_id": 1}
@@ -119,6 +136,7 @@ function show_freeboard () {
   function show_question () {
     $('#question_div').show(function(){
       board = 2;
+      $(this).css({'z-index': ++z_index_increment});
       var first_tb = document.getElementById("table2");
       first_tb.innerHTML = "";
       var dataJSON = {"board_id": 2}
@@ -148,38 +166,155 @@ function show_freeboard () {
     });
     }
 
-    function show_anomboard () {
-      $('#anonymous_div').show(function(){
-        board = 3;
-        var first_tb = document.getElementById("table3");
-        first_tb.innerHTML = "";
-        var dataJSON = {"board_id": 3}
-        var data = JSON.stringify(dataJSON);
-        var xmlHttp1 = new XMLHttpRequest();
-        xmlHttp1.open("POST", "/board/load/anonym", true);
-        xmlHttp1.setRequestHeader("Content-Type", "application/json");
-        xmlHttp1.send(data);
-        xmlHttp1.onreadystatechange = function() {
-          console.log("success3");
-          if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
-            var result = JSON.parse(xmlHttp1.responseText);
-            for (var i in result) {
-              console.log(result[i].id);
-              var elem_id1 = result[i].id;
-              var title = result[i].title;
-              var writer = result[i].user_name;
-              var string_data = result[i].created_at.split("T");
-              var date = string_data[0];
-              var tag = result[i].tag_text;
-              var obj = document.getElementById("table3");
-              var divAppend = document.createElement("tr");
-              divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
-              obj.appendChild(divAppend);
-            }
+
+    function show_question_side () {
+      document.getElementById("detail-list-area-question").innerHTML = "";
+      var dataJSON = {"board_id": 2}
+      var data = JSON.stringify(dataJSON);
+      var xmlHttp1 = new XMLHttpRequest();
+      xmlHttp1.open("POST", "/board/load", true);
+      xmlHttp1.setRequestHeader("Content-Type", "application/json");
+      xmlHttp1.send(data);
+      xmlHttp1.onreadystatechange = function() {
+        console.log("success1");
+        if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+          var result = JSON.parse(xmlHttp1.responseText);
+          document.getElementById("detail-list-area-question").innerHTML = "";
+          for (var i in result) {
+            var elem_id1 = result[i].id;
+            var title = result[i].title;
+            var writer = result[i].nickname;
+            var string_data = result[i].created_at.split("T");
+            var date = string_data[0];
+            var tag = result[i].tag_text;
+            var obj = document.getElementById("detail-list-area-question");
+            var divAppend = document.createElement("div");
+            divAppend.className = "detail-list-item";
+            divAppend.innerHTML = "<p onclick = 'detail2("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+            obj.appendChild(divAppend);
           }
         }
-      });
       }
+    }
+
+
+    function show_questioncomments() {
+      document.getElementById("QuestionCommentsList").innerHTML = "";
+      var dataJSON = {contents_id : question_id};
+      var data = JSON.stringify(dataJSON);
+      var xmlHttp1 = new XMLHttpRequest();
+      xmlHttp1.open("POST", "board/comments/prob/load", true);
+      xmlHttp1.setRequestHeader("Content-Type", "application/json");
+      xmlHttp1.onreadystatechange = function() {
+        if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+          var result = JSON.parse(xmlHttp1.responseText);
+          for (var i in result) {
+            var comment_id1 = result[i].id;
+            var comment_user = result[i].user_id;
+            var comment_title = result[i].title;
+            var comment_text = result[i].comment_text;
+            var comment_date_string = result[i].created_at.split("T");
+            var comment_date = comment_date_string[0];
+            var li = document.createElement("div");
+            li.className = "QuestionCommentsElement"
+            li.innerHTML = " <span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+" - <span id = 'QuestionCommentText' class = 'QuestionCommentText'>"+comment_text+"</span> - <span id = 'QuestionCommentUser' class = 'QuestionCommentUser'>"+comment_user+"</span><span id = 'QuestionCommentDate' class = 'QuestionCommentDate'>"+comment_date+"</span><button id= 'questionCommentDelete' class = 'QuestionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
+            document.getElementById("QuestionCommentsList").appendChild(li);
+          }
+        }
+      }
+      xmlHttp1.send(data);
+    }
+
+function show_anomboard () {
+  $('#anonymous_div').show(function(){
+    board = 3;
+    $(this).css({'z-index': ++z_index_increment});
+    var first_tb = document.getElementById("table3");
+    first_tb.innerHTML = "";
+    var dataJSON = {"board_id": 3}
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp1 = new XMLHttpRequest();
+    xmlHttp1.open("POST", "/board/load/anonym", true);
+    xmlHttp1.setRequestHeader("Content-Type", "application/json");
+    xmlHttp1.send(data);
+    xmlHttp1.onreadystatechange = function() {
+      console.log("success3");
+      if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp1.responseText);
+        for (var i in result) {
+          console.log(result[i].id);
+          var elem_id1 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].user_name;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("table3");
+          var divAppend = document.createElement("tr");
+          divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+          obj.appendChild(divAppend);
+        }
+      }
+    }
+  });
+  }
+
+  function show_anom_side() {
+    document.getElementById("detail-list-area-anom").innerHTML = "";
+    var dataJSON = {"board_id" : 3};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "/board/load/anonym", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.send(data);
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
+        document.getElementById("detail-list-area-anom").innerHTML = "";
+        for (var i in result) {
+          var elem_id3 = result[i].id;
+          var title = result[i].title;
+          var writer = result[i].user_name;
+          var string_data = result[i].created_at.split("T");
+          var date = string_data[0];
+          var tag = result[i].tag_text;
+          var obj = document.getElementById("detail-list-area-anom");
+          var divAppend = document.createElement("div");
+          divAppend.className = "detail-list-item-anom";
+          divAppend.innerHTML = "<p onclick = 'detail3("+elem_id3+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          obj.appendChild(divAppend);
+        }
+      }
+    }
+  }
+
+  function show_anomcomments() {
+    document.getElementById("AnomCommentsList").innerHTML = "";
+    var dataJSON = {contents_id : anom_id};
+    var data = JSON.stringify(dataJSON);
+    var xmlHttp3 = new XMLHttpRequest();
+    xmlHttp3.open("POST", "board/comments/anonym/load", true);
+    xmlHttp3.setRequestHeader("Content-Type", "application/json");
+    xmlHttp3.onreadystatechange = function() {
+      if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        var result = JSON.parse(xmlHttp3.responseText);
+        for (var i in result) {
+          var comment_id3 = result[i].id;
+          var comment_user = result[i].user_name;
+          var comment_text = result[i].comment_text;
+          var comment_date_string = result[i].created_at.split("T");
+          var comment_date = comment_date_string[0];
+          var li = document.createElement("div");
+          li.className = "AnomCommentsElement"
+          li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'check_com_pw(" + comment_id3 + ");'>삭제</button>";
+          document.getElementById("AnomCommentsList").appendChild(li);
+        }
+      }
+    }
+    xmlHttp3.send(data);
+  }
+
+
 
 window.onload = function() {
   var xhr = new XMLHttpRequest();
@@ -191,6 +326,7 @@ window.onload = function() {
       result_obj = JSON.parse(resultJSON);
       user_name = result_obj.user;
       user_id = result_obj.id;
+      document.getElementById("user").innerHTML = user_name + " 로그아웃..."
       console.log(user_name);
     }
   }
@@ -203,24 +339,31 @@ window.onload = function() {
   $('#xiri_div').hide();
   $('#question_div').hide();
   $('#anonymous_div').hide();
-  // printClock();
+  $('#question_add_div').hide();
+  $('#questionBoard_detail_div').hide();
+  $('#anomBoard_detail_div').hide();
+  $('#anomBoard_add_div').hide();
+
+  printClock();
   $('.window').draggable();
+  $('.folder').draggable();
   $(".dropdown").hide();
 
   $( "form" ).submit(function( event ) {
     event.preventDefault();
   });
-  var z_index_increment = 10;
   $('.window').on("click", function(e){
     e.preventDefault();
-    $(this).css('z-index', z_index_increment++);
+    $(this).css({'z-index': ++z_index_increment});
   })
 
 $("#dropdown").click(function(e){
   if($(".dropdown").is(':visible')){
     $(".dropdown").fadeOut('fast');
   } else{
-    $(".dropdown").show();
+    $(".dropdown").show(function(){
+      $(this).css({'z-index' : ++z_index_increment});
+    });
   }
 });
   $("#terminal_").on("click", function(e) {
@@ -231,6 +374,11 @@ $("#dropdown").click(function(e){
     }, {
       duration: 200,
       complete : function() {
+        $('#terminal_div').show(function(){
+
+          $(this).css({'z-index' : ++z_index_increment});
+          $('#TerminalQuery').focus();
+        });
         $img.animate({
           top : "+=30"
         })
@@ -276,16 +424,15 @@ $("#dropdown").click(function(e){
 // -------------------------------------------------------------------------------
 
 
-$('#terminal_btn').on("click", function(e){
+$('#terminal_').on("click", function(e){
   e.preventDefault();
-  $('#terminal_div').show(function(){
-    $('#TerminalQuery').focus();
-  });
 })
 
-$('#xiri_btn').on("click", function(e){
+$('#siri_icon').on("click", function(e){
   e.preventDefault();
-  $('#xiri_div').show();
+  $('#xiri_div').show('slide', {
+    direction : "right"
+  }, 1000);
 })
 
 $('#terminal_div .close_btn').on("click", function(e){
@@ -300,11 +447,13 @@ $('#terminal_chat_div .close_btn').on("click", function(e) {
 
 $('#freeBoard_btn').on("dblclick", function(e){
   e.preventDefault();
+  $('#freeBoard_div').css({top: 200, left: 350, position: 'absolute', overflow: 'hidden', 'z-index': ++z_index_increment});
   show_freeboard();
 });
 
 $('#freeBoard_add_btn').on("click", function(e){
   e.preventDefault();
+  $('#freeBoard_add_div').css({top: 100, left: 400, position: 'absolute', overflow: 'hidden', 'z-index': ++z_index_increment});
   $('#freeBoard_add_div').show();
 })
 
@@ -312,7 +461,7 @@ $('#freeBoard_add_div .close_btn').on("click", function(e) {
   e.preventDefault();
   document.name_form.free_name.value = "";
   document.contents_form.free_contents.value = "";
-  document.freetags.free_tags.value ="";
+  freetagsarray.getTagValues() ="";
   $('#freeBoard_add_div').hide();
 })
 
@@ -333,6 +482,7 @@ $('#xiri_div .close_btn').on("click", function(e){
 
 $("#question_btn").on("dblclick", function(e){
   e.preventDefault();
+  $('#question_div').css({top: 150, left: 500, position: 'absolute', overflow: 'hidden'});
   show_question();
 })
 
@@ -343,6 +493,7 @@ $('#question_div .close_btn').on("click", function(e){
 
 $('#anonymous_btn').on('dblclick', function(e){
   e.preventDefault();
+  $('#anonymous_div').css({top: 100, left: 650, position: 'absolute', overflow: 'hidden'});
   show_anomboard();
 })
 
@@ -350,6 +501,32 @@ $('#anonymous_div .close_btn').on("click", function(e){
   e.preventDefault();
   $('#anonymous_div').hide();
 })
+
+$('#anomBoard_add_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#anomBoard_add_div').hide();
+})
+
+$('#anomBoard_detail_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#anomBoard_detail_div').hide();
+})
+
+
+
+$('#question_add_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  document.question_name_form.question_name.value = "";
+  document.question_contents_form.question_contents.value = "";
+  document.question_tags.question_tags.value ="";
+  $('#question_add_div').hide();
+})
+
+$('#questionBoard_detail_div .close_btn').on("click", function(e){
+  e.preventDefault();
+  $('#questionBoard_detail_div').hide();
+})
+
 //---------------------------------------------------------------------------------------------
 
 $('#search_input1').on("keydown", function(e){
@@ -439,7 +616,7 @@ $('#search_input3').on("keydown", function(e){
           for (var i in result) {
             var elem_id1 = result[i].id;
             var title = result[i].title;
-            var writer = result[i].nickname;
+            var writer = result[i].user_name;
             var string_data = result[i].created_at.split("T");
             var date = string_data[0];
             var tag = result[i].tag_text;
@@ -527,23 +704,47 @@ $(function() {
 
   function fireCommand(string) {
     if (string.endsWith('알람') || string.endsWith('알 람')) {
-  		alert('알람');
-  	}
+        alert('알람');
+     }
     else if (string.endsWith('안녕') || string.endsWith('안 녕')) {
       response.innerHTML = "안녕하세요";
       textToSpeech($('#response').text());
     }
-    else if (string.endsWith('누구야') || string.endsWith('넌 누구야') || string.endsWith('넌 누 구 야')) {
+    else if (string.endsWith('뭐야') || string.endsWith('누구야') || string.endsWith('넌 누구야') || string.endsWith('너 누구야') || string.endsWith('넌 누 구 야') || string.endsWith('너 누 구 야')) {
       response.innerHTML = "안녕하세요 저는 Xiri에요";
-  	  textToSpeech('안녕하세요 저는 Xiri에요');
+      textToSpeech($('#response').text());
     }
+    else if (string.endsWith('사랑해') || string.endsWith('사 랑 해') || string.endsWith('사랑 해') || string.endsWith('사 랑 해')) {
+        response.innerHTML = "아...감사해요";
+        textToSpeech($('#response').text());
+      }
+      else if (string.endsWith('비트박스 해줘') || string.endsWith('비트박스') || string.endsWith('비 트 박 스') || string.endsWith('비트박스 해 줘')) {
+        response.innerHTML = "연습중인 비트박스에요.";
+        textToSpeech("연습 중인 비트박스에요. 북치기 박치기 북치기 박치기 북치기 박치기. 전 이거 하루종일 할 수 있어요.");
+      }
     else if (string.endsWith('터미널') || string.endsWith('터미널 켜줘') || string.endsWith('터 미 널 켜 줘')) {
-      $('#xiri').modal('hide');
-      $('#myTerminal').modal('show');
+      $('#xiri_div').hide();
+      $('#terminal_div').show();
     }
-    else if (string.endsWith('꺼져') || string.endsWith('꺼 져')) {
-      $('#xiri').modal('hide');
-  	}
+    else if (string.endsWith('꺼져') || string.endsWith('꺼 져') || string.endsWith('저리가')|| string.endsWith('저리 가')|| string.endsWith('저 리 가')) {
+      $('#xiri_div').hide();
+     }
+     else if (string.endsWith('자유게시판') || string.endsWith('자유 게시판') || string.endsWith('자 유 게 시 판')) {
+        $('#xiri_div').hide();
+        $('#terminal_div').show();
+      }
+      else if (string.endsWith('익명게시판') || string.endsWith('익명 게시판') || string.endsWith('익 명 게 시 판')) {
+        $('#xiri_div').hide();
+        $('#anonymous_div').show();
+      }
+      else if (string.endsWith('질문게시판') || string.endsWith('질문 게시판') || string.endsWith('질 문 게 시 판')) {
+        $('#xiri_div').hide();
+        $('#question_div').show();
+      }
+      else if (string.endsWith('블루홀') || string.endsWith('블루홀 어때') || string.endsWith('블루홀 좋아') || string.endsWith('펍지 좋아') || string.endsWith('펍지')) {
+        response.innerHTML = "배그는 갓겜이죠.";
+        textToSpeech($('#response').text());
+      }
   }
 
   recognition.onerror = function(event) {
@@ -616,27 +817,42 @@ function query_submit() {
   let split_query = query.split(" ");
   if (split_query[0] === "ls") {
     let foldernode = document.createElement("li");
-    let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$freshman sophomore junior senior all");
+    let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$"+room.join(' '));
+    console.log(room);
     foldernode.appendChild(foldertextnode);
     document.getElementById("TerminalList").appendChild(foldernode);
   }
   if (split_query[0] === "vim") {
-      console.log(split_query[1]);
-      room_id = split_query[1];
-      console.log(room_id);
+    console.log(split_query[1]);
+    room_id = split_query[1];
+    console.log(room_id);
+    socket = io.connect('https://sambong.koreacentral.cloudapp.azure.com:443');
+    socket.connect();
+    socket.on('connect', function(){
       socket.emit('join:room', {roomId: room_id});
       $('#terminal_div').hide();
+      $('#terminal_chat_div').css({top:300, left: 600, 'z-index': ++z_index_increment});
       $('#terminal_chat_div').show(function(){
         console.log("get chag");
         socket.on('send:message', function (data) {
-        let chat_message = document.createElement("li");
-        let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+"cs496"+"$"+data);
-        chat_message.appendChild(chat_message_text);
-        document.getElementById("ChatList").appendChild(chat_message);
+          let chat_message = document.createElement("li");
+          let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+"cs496"+"$"+data);
+          chat_message.appendChild(chat_message_text);
+          document.getElementById("ChatList").appendChild(chat_message);
         });
         $('#ChatQuery').focus();
       });;
+    })
   }
+  if (split_query[0] === "mkdir") {
+    room.push(split_query[1]);
+}
+if (split_query[0] === "exit") {
+  $('#terminal_div').hide();
+}
+if (split_query[0]=== "quit") {
+  $('#terminal_div').hide();
+}
   if (split_query[0] === "cd") {
     console.log(split_query[1]);
     folder_id = split_query[1];
@@ -647,7 +863,13 @@ function query_submit() {
     }
     else if (folder_id === 'anonymous') {
       $('#terminal_div').hide();
-     // $('#terminal_chat_div').show();
+      //$('#anonymous_div').show();
+      show_anomboard();
+    }
+    else if (folder_id === 'question') {
+      $('#terminal_div').hide();
+      //$('#anonymous_div').show();
+      show_question();
     }
   }
 }
@@ -656,8 +878,11 @@ function chat_submit() {
   let chat_query = document.getElementById("ChatQuery").value;
   console.log(document.getElementById("ChatQuery").value);
   if (chat_query === ':wq') {
+    socket.disconnect();
+    document.getElementById("ChatList").innerHTML = "";
     $('#terminal_chat_div').hide();
     $('#terminal_div').show(function(){
+      $(this).css({'z-index': ++z_index_increment});
       $('#TerminalQuery').focus();
     });
   }
@@ -667,13 +892,41 @@ function chat_submit() {
 
 function add_free() {
   $('#freeBoard_div').hide();
-  $('#freeBoard_add_div').show();
+  free_flag = 1;
+  $('#freeBoard_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
+}
+
+function add_question() {
+  console.log("aaaaaaaaa");
+  question_flag = 1;
+  $('#question_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
+}
+
+function add_anom() {
+  console.log("aaaaaaaaa");
+  anom_flag = 1;
+  $('#anomBoard_add_div').show(function(){
+    $(this).css({'z-index' : ++z_index_increment});
+  });
 }
 
 //------------------------------------for free board
+function send_free_two() {
+  if (free_flag == 1) {
+    send_free_add();
+  }
+  else if (free_flag == 2) {
+    send_free_modify();
+  }
+
+}
 function send_free_add () {
-  console.log(document.freetags.free_tags.value);
-  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : document.freetags.free_tags.value};
+  console.log(freetagsarray.getTagValues());
+  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : freetagsarray.getTagValues().toString()};
   var data = JSON.stringify(dataJSON);
   console.log(dataJSON);
   var xhr = new XMLHttpRequest();
@@ -683,7 +936,7 @@ function send_free_add () {
   $('#freeBoard_add_div').hide();
   document.name_form.free_name.value = "";
   document.contents_form.free_contents.value = "";
-  document.freetags.free_tags.value ="";
+  freetagsarray.getTagValues() ="";
   show_freeboard();
   show_freecomments();
 
@@ -691,7 +944,9 @@ function send_free_add () {
 
 function detail1(elem_id1) {
   $('#freeBoard_div').hide();
-  $('#freeBoard_detail_div').show();
+  $('#freeBoard_detail_div').show( function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
   free_id = elem_id1;
   console.log(elem_id1);
   var dataJSON = {"board_id" : board, "contents_id" : elem_id1};
@@ -739,6 +994,7 @@ function delete_free() {
 }
 
 function modify_free() {
+  free_flag = 2;
   modify_free_title = $("#freetitle").text();
   modify_free_user = $("#freeuser").text();
   modify_free_content = $("#freecontent").text();
@@ -746,12 +1002,14 @@ function modify_free() {
   $('#freeBoard_detail_div').hide();
   document.name_form.free_name.value = modify_free_title;
   document.contents_form.free_contents.value = modify_free_content;
-  document.freetags.free_tags.value = modify_free_tag;
-  $('#freeBoard_add_div').show();
+  freetagsarray.getTagValues() = modify_free_tag;
+  $('#freeBoard_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
 }
 
 function send_free_modify () {
-  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "title" : document.name_form.free_name.value, "contents_text": document.contents_form.free_contents.value, "tags":  document.freetags.free_tags.value};
+  var dataJSON = {"contents_id" : free_id, "user_id" : user_id, "title" : document.name_form.free_name.value, "contents_text": document.contents_form.free_contents.value, "tags":  freetagsarray.getTagValues().toString()};
   var data = JSON.stringify(dataJSON);
   var xhr1 = new XMLHttpRequest();
   xhr1.open("POST", "/board/contents/edit", true);
@@ -766,7 +1024,7 @@ function send_free_modify () {
       $('#freeBoard_add_div').hide();
       document.name_form.free_name.value = "";
       document.contents_form.free_contents.value = "";
-      document.freetags.free_tags.value ="";
+      freetagsarray.getTagValues() ="";
       show_freeboard();
       show_freecomments();
     } else {
@@ -801,10 +1059,377 @@ function Delete_free_comments(comment_id1) {
     result_obj = JSON.parse(resultJSON);
     show_freecomments();
     $('#freeBoard_detail_div').hide();
-    $('#freeBoard_detail_div').show();
+    $('#freeBoard_detail_div').show(function(){
+      $(this).css({'z-index': ++z_index_increment});
+    });
     show_free_side();
   }
 }
 }
 
-// -------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------for question board
+function send_question_two() {
+  if (question_flag == 1) {
+    send_question_add();
+  }
+  else if (question_flag == 2) {
+    send_question_modify();
+  }
+}
+function send_question_add () {
+  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : document.question_tags.question_tags.value};
+  var data = JSON.stringify(dataJSON);
+  console.log(dataJSON);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/board/contents", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+  $('#freeBoard_add_div').hide();
+  document.question_name_form.question_name.value = "";
+  document.question_contents_form.question_contents.value = "";
+  document.question_tags.question_tags.value ="";
+  show_question();
+}
+
+function detail2(elem_id2) {
+  $('#questionBoard_detail_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
+  question_id = elem_id2;
+  console.log(elem_id2);
+  var dataJSON = {"board_id" : board, "contents_id" : elem_id2};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/detail", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+        $("#questiontitle").text(result_obj.title);
+        $("#questionuser").text(result_obj.nickname);
+        $("#questioncontent").text(result_obj.contents_text);
+        $("#questiontag").text(result_obj.tag_text);
+    }
+    show_question_side();
+  }
+  show_questioncomments();
+}
+
+function delete_question() {
+  var dataJSON = {"contents_id" : question_id, "user_id" : user_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  console.log(question_id);
+  xhr1.open("POST", "/board/contents/delete", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Deleting failed') {
+      //$('#questionBoard_detail_div').hide();
+      show_question();
+      show_question_side();
+      show_questioncomments();
+    } else {
+      alert("Failed To Delete!");
+    }
+    }
+  }
+}
+
+function modify_question() {
+  console.log("modifyy");
+  question_flag = 2;
+  modify_question_title = $("#questiontitle").text();
+  modify_question_user = $("#questionuser").text();
+  modify_question_content = $("#questioncontent").text();
+  modify_question_tag =  $("#questiontag").text();
+  //$('#questionBoard_detail_div').hide();
+  document.question_name_form.question_name.value = modify_question_title;
+  document.question_contents_form.question_contents.value = modify_question_content;
+  document.question_tags.question_tags.value = modify_question_tag;
+  $('#question_add_div').show(function(){
+    $(this).css({'z-index': ++z_index_increment});
+  });
+}
+
+function send_question_modify () {
+  var dataJSON = {"contents_id" : question_id, "user_id" : user_id, "title" : document.question_name_form.question_name.value, "contents_text": document.question_contents_form.question_contents.value, "tags":  document.question_tags.question_tags.value};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/contents/edit", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr1.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Editing failed') {
+      $('#question_add_div').hide();
+      document.question_name_form.question_name.value = "";
+      document.question_contents_form.question_contents.value = "";
+      document.question_tags.question_tags.value ="";
+      show_question_side();
+      show_question();
+      show_questioncomments();
+    } else {
+      alert("Failed To Edit!");
+    }
+    }
+  }
+}
+
+function send_question_comment () {
+  var dataJSON = {"contents_id" : question_id, "user_id" : user_id, "comment_text" : document.getElementById("question_comments").value, "title" : document.getElementById("question_comments_title").value};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/comments/prob", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  document.getElementById("question_comments").value = "";
+  document.getElementById("question_comments_title").value = "";
+  show_questioncomments();
+}
+
+
+function Delete_question_comments(comment_id2) {
+  var dataJSON = {"comment_id" : comment_id2, "user_id" : user_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr1 = new XMLHttpRequest();
+  xhr1.open("POST", "/board/comments/prob/delete", true);
+  xhr1.setRequestHeader("Content-Type", "application/json");
+  xhr1.send(data);
+  xhr1.onreadystatechange = function() {
+    if (xhr1.readyState == XMLHttpRequest.DONE) {
+    document.getElementById("question_comments").value = "";
+    var resultJSON = xhr1.response;
+    result_obj = JSON.parse(resultJSON);
+    show_questioncomments();
+    $('#questionBoard_detail_div').hide();
+    $('#questionBoard_detail_div').show(function(){
+      $(this).css({'z-index': ++z_index_increment});
+    });
+    show_question_side();
+  }
+}
+}
+
+
+//-----------------for anom board
+
+function send_anom_two () {
+  if (anom_flag == 1) {
+    send_anom_add();
+  }
+  else if (anom_flag == 2) {
+    send_anom_modify();
+  }
+
+}
+
+function send_anom_add () {
+  var dataJSON = {"user_name" : document.anom_nickname_form.anom_nickname.value, "board_id" : 3, "title" : document.anom_name_form.anom_name.value, "contents_text" : document.anom_contents_form.anom_contents.value, "tags" : document.anomtags.anom_tags.value, "password" : document.anompw.anom_pw.value};
+  var data = JSON.stringify(dataJSON);
+  console.log(dataJSON);
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", "/board/contents/anonym", true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.send(data);
+  $('#anomBoard_add_div').hide();
+  document.anom_name_form.anom_name.value = "";
+  document.anom_nickname_form.anom_nickname.value = "";
+  document.anom_contents_form.anom_contents.value = "";
+  document.anomtags.anom_tags.value = "";
+  document.anompw.anom_pw.value = "";
+  show_anomboard();
+  show_anomcomments();
+
+}
+
+function detail3(elem_id3) {
+  $('#anonymous_div').hide();
+  $('#anomBoard_detail_div').show(function(){
+    $(this).css({'z-index' : ++z_index_increment});
+  });
+  anom_id = elem_id3;
+  var dataJSON = {"contents_id" : elem_id3};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/detail/anonym", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      $("#anomtitle").text(result_obj.title);
+      $("#anomuser").text(result_obj.user_name);
+      $("#anomcontent").text(result_obj.contents_text);
+      $("#anomtag").text(result_obj.tag_text);
+    }
+    show_anom_side();
+  }
+  show_anomcomments();
+}
+
+function delete_anom() {
+  var dataJSON = {"contents_id" : anom_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/contents/anonym/delete", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Deleting failed') {
+      $('#anomBoard_detail_div').hide();
+      show_anomboard();
+      show_anomcomments();
+      }
+      else {
+      alert("Failed To Delete!");
+      }
+    }
+  }
+}
+
+function check_pw(option) {
+  var pw = prompt("비밀번호 확인", "");
+  var dataJSON = {"password" : pw, "contents_id" : anom_id};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/contents/anonym/confirm", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      console.log(resultJSON);
+      result_obj = JSON.parse(resultJSON);
+      if (result_obj.message !== 'Wrong password') {
+        if (option === 1)
+          modify_anom();
+        else if (option === 2)
+          delete_anom();
+      }
+      else {
+        alert("Wrong password");
+      }
+    }
+  }
+}
+
+function check_com_pw(comment_id3) {
+  var pw = prompt("비밀번호 확인", "");
+  var dataJSON = {"password" : pw, "comments_id" : comment_id3};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/comments/anonym/confirm", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      if (result_obj.message !== 'Wrong password') {
+        Delete_anom_comments(comment_id3);
+      }
+      else {
+        alert("Wrong password");
+      }
+    }
+  }
+}
+
+function modify_anom() {
+  anom_flag = 2;
+  modify_anom_title = $("#anomtitle").text();
+  modify_anom_user = $("#anomuser").text();
+  modify_anom_content = $("#anomcontent").text();
+  modify_anom_tag = $("#anomtag").text();
+  $("#anomBoard_detail_div").hide();
+  document.anom_name_form.anom_name.value = modify_anom_title;
+  document.anom_nickname_form.anom_nickname.value = modify_anom_user;
+  document.anom_contents_form.anom_contents.value = modify_anom_content;
+  document.anomtags.anom_tags.value = modify_anom_tag;
+  document.anompw.anom_pw = "";
+  $('#anomBoard_add_div').show(function(){
+    $(this).css({'z-index' : ++z_index_increment});
+  });
+}
+
+function send_anom_modify() {
+  var dataJSON = {"contents_id" : anom_id, "password" : document.anompw.anom_pw.value, "title" : document.anom_name_form.anom_name.value, "contents_text": document.anom_contents_form.anom_contents.value, "tags":  document.anomtags.anom_tags.value};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/contents/anonym/edit", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      console.log(resultJSON);
+      if (result_obj.message !== 'Editing failed') {
+        $('#anomBoard_add_div').hide();
+        document.anom_name_form.anom_name.value = "";
+        document.anom_nickname_form.anom_nickname = "";
+        document.anom_contents_form.anom_contents.value = "";
+        document.anomtags.anom_tags.value = "";
+        document.anompw.anom_pw.value = "";
+        show_anomboard();
+        show_anomcomments();
+      }
+      else {
+        alert("Failed To Edit!");
+      }
+    }
+  }
+}
+
+function send_anom_comment() {
+  var dataJSON = {"contents_id" : anom_id, "user_name" : document.getElementById("anom_username").value, "comment_text" : document.getElementById("anom_comments").value, "password" : document.getElementById("anom_password").value};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/comments/anonym", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  document.getElementById("anom_username").value = "";
+  document.getElementById("anom_comments").value = "";
+  document.getElementById("anom_password").value = "";
+  show_anomcomments();
+}
+
+function Delete_anom_comments(comment_id3) {
+  var dataJSON = {"comment_id" : comment_id3};
+  var data = JSON.stringify(dataJSON);
+  var xhr3 = new XMLHttpRequest();
+  xhr3.open("POST", "/board/comments/anonym/delete", true);
+  xhr3.setRequestHeader("Content-Type", "application/json");
+  xhr3.send(data);
+  xhr3.onreadystatechange = function() {
+    if (xhr3.readyState == XMLHttpRequest.DONE) {
+      document.getElementById("anom_username").value = "";
+      document.getElementById("anom_comments").value = "";
+      document.getElementById("anom_password").value = "";
+      var resultJSON = xhr3.response;
+      result_obj = JSON.parse(resultJSON);
+      show_anomcomments();
+      $('#anomBoard_detail_div').hide();
+      $('#anomBoard_detail_div').show(function(){
+        $(this).css({'z-index' : ++z_index_increment});
+      });
+      show_anom_side();
+  }
+  }
+}

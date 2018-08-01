@@ -44,9 +44,9 @@ router.post('/signin', asyncMiddleware(async function(req, res, next) {
 }))
 
 
-router.post('/logout', (req, res) => {
-  //TODO: 로그아웃 구현
-  return res.json({ success: true })
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.redirect('/');
 })
 
 
