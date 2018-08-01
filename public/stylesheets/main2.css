@@ -197,14 +197,12 @@ html, body {
 	text-shadow: 0 1px 1px #e7e7e7;
 	text-align:center;
 	text-transform:capitalize;
+	font-family: "FontAwesome";
 }
 
 .noticeTitleInside input {
-	width: 350px;
-	border: 0.5px solid gray;
 	border-radius : 5px;
 }
-
 
 nav.control-window {
 	position:absolute;
@@ -384,9 +382,8 @@ ul.TerminalContents, ul.ChatContents {
 	height: 60px;
 }
 
-.FreeCommentsElement{
+.FreeCommentsElement, .AnomCommentsElement{
 	margin: 5px 10px;
-	border-top:1px solid rgb(235,235,233);
 	border-top:1px solid rgb(235,235,233);
 }
 
@@ -398,18 +395,45 @@ ul.TerminalContents, ul.ChatContents {
 	border-radius : 5px;
 }
 
-.FreeCommentsElement span{
+.FreeCommentsElement span, .AnomCommentsElement span{
 	padding: 0 5px;
 	font-size: 14px;
 }
 
-.FreeCommentsElement .FreeCommentUser{
+.FreeCommentsElement .FreeCommentUser, .AnomCommentsElement .AnomCommentUser{
 	color: rgb(120, 113, 223);
 }
 
-.FreeCommentsElement .FreeCommentDate {
+.FreeCommentsElement .FreeCommentDate, .AnomCommentsElement .AnomCommentUser {
 	color: rgb(116, 116, 116);
 }
+
+.QuestionCommentsElement {
+	margin-left : 20px;
+	margin-top: 0px;
+	margin-bottom: 15px;
+	border-top:1px solid rgb(235,235,233);
+}
+
+.QuestionCommentsElement .QuestionCommentTitle {
+	font-size: 17px;
+	font-weight: bold;
+}
+
+.QuestionCommentUser, .QuestionCommentDate {
+	font-size: 12px;
+}
+
+.QuestionCommentText {
+	font-size: 14.5px;
+}
+
+.QuestionCommentDelete, .AnomCommentDelete, .FreeCommentDelete{
+	border: 0; background: transparent;
+	font-size: 12px;
+	font-family: 'FontAwesome';
+}
+
 .table>thead>tr>th{
   height: 17px;
   padding-top: 0px;
@@ -499,18 +523,55 @@ ul.TerminalContents, ul.ChatContents {
 	font-size: 14px;
 }
 
-.send_btn{
-	margin:5px 5px 5px 0;
-	width:34px;
-	height:20px;
-		border-radius: 3px;
-		border: 0.2px; solid: rgb(223,221,223);
-	font-family: "FontAwesome";
-	background-color: rgb(249, 249, 247);
-	display:inline-block;
-	text-align:center;
+.detail-list-item .detail_title, .detail-list-item-anom .detail_title {
+	margin-left: 4px;
+	margin-bottom: 7px;
+	padding-top: 5px;
+	font-size: 17px;
+	font-weight: bold;
 }
-.send_btn span{
-	color: rgb(115,115,115);
-	margin:auto;
+
+.detail-list-item .creator, .detail-list-item-anom .creator {
+	margin-left: 4px;
+	margin-bottom: 0;
+	padding-bottom: 1px;
+	font-size: 12px;
+}
+
+
+.detail-add {
+	font-size: 22px;
+	margin:0;
+	padding:0;
+	width:100%;
+	height:100%;
+}
+
+.top-button{
+		display: inline-block;
+		border-radius: 3px;
+		width: 38px;
+		height: 24px;
+		border: 0.2px; solid: rgb(223,221,223);
+		background-color:rgb(245,245,245);
+		font-family: "FontAwesome";
+		color: rgb(115,115,115);
+		font-size: 14px;
+		text-align: center;
+		padding-top: 3px;
+}
+
+.detail-comment input {
+	background-color:rgb(248,248,248);
+	width: 37.5%;
+	height: 25px;
+	float:left;
+	border: 0.5px solid rgb(213, 213, 213);
+	border-radius : 3px;
+	margin: 0 20px 8px 0;
+}
+
+.detail-comment input::placeholder{
+	padding-left: 10px;
+	font-size: 12px;
 }

@@ -21,6 +21,28 @@ function turn_off() {
   return false;
 }
 
+function Detail_Date() {
+  var n_date = new Date ();
+  var n_year = n_date.getYear()+1900;
+  var n_month = n_date.getMonth() + 1;
+  var n_day = n_date.getDate();
+  var n_hour = n_date.getHours();
+  var n_min = n_date.getMinutes();
+  var time_string = "";
+  if (n_hour <= 12) {
+  time_string = n_year+"년 "+n_month+"월 "+n_day+"일 오전 "+n_hour+":"+n_min;
+  }
+  else {
+  time_string = n_year+"년 "+n_month+"월 "+n_day+"일 오후 "+n_hour+":"+n_min;
+  }
+  console.log(time_string);
+  console.log(document.getElementById("detail_time").innerHTML);
+  $(".set_current_detail_time").text(time_string);
+}
+
+
+
+
 function printClock() {
   var seoul = moment().tz("Asia/Seoul");
   var day = seoul.day();
@@ -68,7 +90,9 @@ function show_freeboard () {
           var tag = result[i].tag_text;
           var obj = document.getElementById("table1");
           var divAppend = document.createElement("tr");
-          divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail1("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+          divAppend.setAttribute('id', "freeboard_"+elem_id1);
+          divAppend.setAttribute('ondblclick','detail1('+elem_id1+');');
+          divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail1("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
           obj.appendChild(divAppend);
         }
       }
@@ -101,7 +125,7 @@ function show_freeboard () {
           divAppend.className = "detail-list-item";
           divAppend.setAttribute('id', "detail_"+elem_id1);
           divAppend.setAttribute('onclick','detail1('+elem_id1+');');
-          divAppend.innerHTML = "<p style='font-weight: bold; overflow: hidden;padding:7px 0 0 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          divAppend.innerHTML = "<p class='detail_title' >"+title+"</p><p class='creator'><span>"+date+"&nbsp;&nbsp;"+"</span>"+writer+"</p>";
           obj.appendChild(divAppend);
         }
         callback();
@@ -111,7 +135,6 @@ function show_freeboard () {
   }
 
   function show_freecomments() {
-    document.getElementById("FreeCommentsList").innerHTML = "";
     var dataJSON = {contents_id : free_id};
     var data = JSON.stringify(dataJSON);
     var xmlHttp1 = new XMLHttpRequest();
@@ -119,6 +142,7 @@ function show_freeboard () {
     xmlHttp1.setRequestHeader("Content-Type", "application/json");
     xmlHttp1.onreadystatechange = function() {
       if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+        document.getElementById("FreeCommentsList").innerHTML = "";
         var result = JSON.parse(xmlHttp1.responseText);
         for (var i in result) {
           var comment_id1 = result[i].id;
@@ -161,7 +185,9 @@ function show_freeboard () {
             var tag = result[i].tag_text;
             var obj = document.getElementById("table2");
             var divAppend = document.createElement("tr");
-            divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            divAppend.setAttribute('id', "question_"+elem_id1);
+            divAppend.setAttribute('ondblclick','detail2('+elem_id1+');');
+            divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
             obj.appendChild(divAppend);
           }
         }
@@ -170,8 +196,8 @@ function show_freeboard () {
     }
 
 
-    function show_question_side () {
-      document.getElementById("detail-list-area-question").innerHTML = "";
+    function show_question_side (something) {
+      //document.getElementById("detail-list-area-question").innerHTML = "";
       var dataJSON = {"board_id": 2}
       var data = JSON.stringify(dataJSON);
       var xmlHttp1 = new XMLHttpRequest();
@@ -192,17 +218,19 @@ function show_freeboard () {
             var tag = result[i].tag_text;
             var obj = document.getElementById("detail-list-area-question");
             var divAppend = document.createElement("div");
+            divAppend.setAttribute('id', "question_detail_"+elem_id1);
+            divAppend.setAttribute('onclick','detail2('+elem_id1+');');
             divAppend.className = "detail-list-item";
-            divAppend.innerHTML = "<p onclick = 'detail2("+elem_id1+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+            divAppend.innerHTML = "<p class='detail_title' onclick = 'detail2("+elem_id1+");'>"+title+"</p><p class='creator'><span>"+date+"&nbsp;&nbsp;"+"</span>"+writer+"</p>";
             obj.appendChild(divAppend);
           }
+          something();
         }
       }
     }
 
 
     function show_questioncomments() {
-      document.getElementById("QuestionCommentsList").innerHTML = "";
       var dataJSON = {contents_id : question_id};
       var data = JSON.stringify(dataJSON);
       var xmlHttp1 = new XMLHttpRequest();
@@ -210,6 +238,7 @@ function show_freeboard () {
       xmlHttp1.setRequestHeader("Content-Type", "application/json");
       xmlHttp1.onreadystatechange = function() {
         if (xmlHttp1.readyState == XMLHttpRequest.DONE) {
+          document.getElementById("QuestionCommentsList").innerHTML = "";
           var result = JSON.parse(xmlHttp1.responseText);
           for (var i in result) {
             var comment_id1 = result[i].id;
@@ -220,7 +249,7 @@ function show_freeboard () {
             var comment_date = comment_date_string[0];
             var li = document.createElement("div");
             li.className = "QuestionCommentsElement"
-            li.innerHTML = " <span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+" - <span id = 'QuestionCommentText' class = 'QuestionCommentText'>"+comment_text+"</span> - <span id = 'QuestionCommentUser' class = 'QuestionCommentUser'>"+comment_user+"</span><span id = 'QuestionCommentDate' class = 'QuestionCommentDate'>"+comment_date+"</span><button id= 'questionCommentDelete' class = 'QuestionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>삭제</button>";
+            li.innerHTML = "<br><div class = 'question_title'><span id='QuestionCommentTitle' class='QuestionCommentTitle'>"+comment_title+" </span></div><div class = 'question_info'><span id = 'QuestionCommentUser' class = 'QuestionCommentUser'>"+comment_user+"&nbsp;&nbsp;</span><span id = 'QuestionCommentDate' class = 'QuestionCommentDate'>"+comment_date+"</span></div><div class = 'question_comment'><span id = 'QuestionCommentText' class = 'QuestionCommentText'>"+comment_text+"</span><button id= 'questionCommentDelete' class = 'QuestionCommentDelete' onclick = 'Delete_question_comments("+comment_id1+");'>&#xf00d;</button></div>";
             document.getElementById("QuestionCommentsList").appendChild(li);
           }
         }
@@ -254,7 +283,9 @@ function show_anomboard () {
           var tag = result[i].tag_text;
           var obj = document.getElementById("table3");
           var divAppend = document.createElement("tr");
-          divAppend.innerHTML = "<td id="+elem_id1+" onclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
+            divAppend.setAttribute('id', "anom_"+elem_id1);
+            divAppend.setAttribute('ondblclick','detail3('+elem_id1+');');
+          divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
           obj.appendChild(divAppend);
         }
       }
@@ -262,8 +293,8 @@ function show_anomboard () {
   });
   }
 
-  function show_anom_side() {
-    document.getElementById("detail-list-area-anom").innerHTML = "";
+  function show_anom_side(something) {
+    //document.getElementById("detail-list-area-anom").innerHTML = "";
     var dataJSON = {"board_id" : 3};
     var data = JSON.stringify(dataJSON);
     var xmlHttp3 = new XMLHttpRequest();
@@ -283,16 +314,18 @@ function show_anomboard () {
           var tag = result[i].tag_text;
           var obj = document.getElementById("detail-list-area-anom");
           var divAppend = document.createElement("div");
+          divAppend.setAttribute('id', "anom_detail_"+elem_id3);
+            divAppend.setAttribute('onclick','detail3('+elem_id3+');');
           divAppend.className = "detail-list-item-anom";
-          divAppend.innerHTML = "<p onclick = 'detail3("+elem_id3+");'style='font-weight: bold; overflow: hidden;margin: 7px;'>"+title+"</p><p style='font-size:5px;margin: 7px;'><span>"+date+"</span>"+writer+"</p>";
+          divAppend.innerHTML = "<p class='detail_title'>"+title+"</p><p class='creator'><span>"+date+"&nbsp;&nbsp;"+"</span>"+writer+"</p>";
           obj.appendChild(divAppend);
         }
+        something();
       }
     }
   }
 
   function show_anomcomments() {
-    document.getElementById("AnomCommentsList").innerHTML = "";
     var dataJSON = {contents_id : anom_id};
     var data = JSON.stringify(dataJSON);
     var xmlHttp3 = new XMLHttpRequest();
@@ -300,6 +333,7 @@ function show_anomboard () {
     xmlHttp3.setRequestHeader("Content-Type", "application/json");
     xmlHttp3.onreadystatechange = function() {
       if (xmlHttp3.readyState == XMLHttpRequest.DONE) {
+        document.getElementById("AnomCommentsList").innerHTML = "";
         var result = JSON.parse(xmlHttp3.responseText);
         for (var i in result) {
           var comment_id3 = result[i].id;
@@ -809,11 +843,9 @@ $(function() {
 }
 
 window.addEventListener('DOMContentLoaded', function () {
-
   freetagsarray = new Taggle('freetags');
   questiontagsarray = new Taggle('question_tags');
   anomtagsarray = new Taggle('anomtags');
-
 })
 
 
@@ -908,8 +940,10 @@ function chat_submit() {
 function add_free() {
   //$('#freeBoard_div').hide();
   free_flag = 1;
+
   $('#freeBoard_add_div').show(function(){
     $(this).css({'z-index': ++z_index_increment});
+    Detail_Date();
   });
 }
 
@@ -918,6 +952,7 @@ function add_question() {
   question_flag = 1;
   $('#question_add_div').show(function(){
     $(this).css({'z-index': ++z_index_increment});
+    Detail_Date();
   });
 }
 
@@ -926,6 +961,7 @@ function add_anom() {
   anom_flag = 1;
   $('#anomBoard_add_div').show(function(){
     $(this).css({'z-index' : ++z_index_increment});
+    Detail_Date();
   });
 }
 
@@ -941,7 +977,7 @@ function send_free_two() {
 }
 function send_free_add () {
   console.log(freetagsarray.getTagValues());
-  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : freetagsarray.getTagValues().toString()};
+  var dataJSON = {"user_id" : user_id, "board_id" : 1, "title" : document.name_form.free_name.value, "contents_text" : document.contents_form.free_contents.value, "tags" : freetagsarray.getTagValues().toString()};
   var data = JSON.stringify(dataJSON);
   console.log(dataJSON);
   var xhr = new XMLHttpRequest();
@@ -964,7 +1000,7 @@ function detail1(elem_id1) {
   });
   free_id = elem_id1;
   console.log(elem_id1);
-  var dataJSON = {"board_id" : board, "contents_id" : elem_id1};
+  var dataJSON = {"board_id" : 1, "contents_id" : elem_id1};
   var data = JSON.stringify(dataJSON);
   var xhr1 = new XMLHttpRequest();
   xhr1.open("POST", "/board/detail", true);
@@ -979,6 +1015,11 @@ function detail1(elem_id1) {
         $("#freeuser").text(result_obj.nickname);
         $("#freecontent").text(result_obj.contents_text);
         $("#freetag").text(result_obj.tag_text);
+        var detail1_time = result_obj.created_at;
+        var a = detail1_time.split("T");
+        var split_date = a[0].split("-");
+        var splited_string = split_date[0]+"년 "+split_date[1]+"월 "+split_date[2]+"일";
+        $("#detail_time_free").text(splited_string);
     }
     show_free_side(function(){
       $("#detail_"+elem_id1).css({'background-color':'rgb(248,225,152)'})
@@ -1089,6 +1130,7 @@ function Delete_free_comments(comment_id1) {
 
 // -------------------------------------------------------------------------------for question board
 function send_question_two() {
+  console.log("send question");
   if (question_flag == 1) {
     send_question_add();
   }
@@ -1097,7 +1139,7 @@ function send_question_two() {
   }
 }
 function send_question_add () {
-  var dataJSON = {"user_id" : user_id, "board_id" : board, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : questiontagsarray.getTagValues().toString()};
+  var dataJSON = {"user_id" : user_id, "board_id" : 2, "title" : document.question_name_form.question_name.value, "contents_text" : document.question_contents_form.question_contents.value, "tags" : questiontagsarray.getTagValues().toString()};
   var data = JSON.stringify(dataJSON);
   console.log(dataJSON);
   var xhr = new XMLHttpRequest();
@@ -1117,7 +1159,7 @@ function detail2(elem_id2) {
   });
   question_id = elem_id2;
   console.log(elem_id2);
-  var dataJSON = {"board_id" : board, "contents_id" : elem_id2};
+  var dataJSON = {"board_id" : 2, "contents_id" : elem_id2};
   var data = JSON.stringify(dataJSON);
   var xhr1 = new XMLHttpRequest();
   xhr1.open("POST", "/board/detail", true);
@@ -1132,8 +1174,15 @@ function detail2(elem_id2) {
         $("#questionuser").text(result_obj.nickname);
         $("#questioncontent").text(result_obj.contents_text);
         $("#questiontag").text(result_obj.tag_text);
+        var detail1_time = result_obj.created_at;
+        var a = detail1_time.split("T");
+        var split_date = a[0].split("-");
+        var splited_string = split_date[0]+"년 "+split_date[1]+"월 "+split_date[2]+"일";
+        $("#detail_time_question").text(splited_string);
     }
-    show_question_side();
+    show_question_side(function(){
+      $("#question_detail_"+elem_id2).css({'background-color':'rgb(248,225,152)'})
+    });
   }
   show_questioncomments();
 }
@@ -1294,11 +1343,20 @@ function detail3(elem_id3) {
       $("#anomuser").text(result_obj.user_name);
       $("#anomcontent").text(result_obj.contents_text);
       $("#anomtag").text(result_obj.tag_text);
+      var detail1_time = result_obj.created_at;
+      var a = detail1_time.split("T");
+      var split_date = a[0].split("-");
+      var splited_string = split_date[0]+"년 "+split_date[1]+"월 "+split_date[2]+"일";
+      $("#detail_time_anom").text(splited_string);
     }
-    show_anom_side();
+    show_anom_side(function(){
+      $("#anom_detail_"+elem_id3).css({'background-color':'rgb(248,225,152)'})
+    });
   }
   show_anomcomments();
 }
+
+
 
 function delete_anom() {
   var dataJSON = {"contents_id" : anom_id};
