@@ -92,6 +92,7 @@ function show_freeboard () {
           var divAppend = document.createElement("tr");
           divAppend.setAttribute('id', "freeboard_"+elem_id1);
           divAppend.setAttribute('ondblclick','detail1('+elem_id1+');');
+          divAppend.className = 'content-item';
           divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail1("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
           obj.appendChild(divAppend);
         }
@@ -187,6 +188,7 @@ function show_freeboard () {
             var divAppend = document.createElement("tr");
             divAppend.setAttribute('id', "question_"+elem_id1);
             divAppend.setAttribute('ondblclick','detail2('+elem_id1+');');
+            divAppend.className = 'content-item';
             divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail2("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
             obj.appendChild(divAppend);
           }
@@ -283,8 +285,9 @@ function show_anomboard () {
           var tag = result[i].tag_text;
           var obj = document.getElementById("table3");
           var divAppend = document.createElement("tr");
-            divAppend.setAttribute('id', "anom_"+elem_id1);
-            divAppend.setAttribute('ondblclick','detail3('+elem_id1+');');
+          divAppend.setAttribute('id', "anom_"+elem_id1);
+          divAppend.className = 'content-item';
+          divAppend.setAttribute('ondblclick','detail3('+elem_id1+');');
           divAppend.innerHTML = "<td id="+elem_id1+" ondblclick='detail3("+elem_id1+");'>" + title + "</td><td>" + writer + "</td><td>" + date + "</td><td>" + tag + "</td>";
           obj.appendChild(divAppend);
         }

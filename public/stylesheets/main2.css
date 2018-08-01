@@ -388,6 +388,7 @@ ul.TerminalContents, ul.ChatContents {
 .window-detail .detail-list-item {
 	border-bottom : 0.5px solid rgb(230,230,230);
 	height: 60px;
+	overflow: hidden;
 }
 
 .FreeCommentsElement, .AnomCommentsElement{
@@ -537,6 +538,10 @@ ul.TerminalContents, ul.ChatContents {
 	padding-top: 5px;
 	font-size: 17px;
 	font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  display: block;
+  text-overflow: ellipsis;
 }
 
 .detail-list-item .creator, .detail-list-item-anom .creator {
@@ -579,7 +584,11 @@ ul.TerminalContents, ul.ChatContents {
 	margin: 0 20px 8px 0;
 }
 
-.detail-comment input::placeholder{
+.detail-comment input::placeholder, .detail-comment textarea::placeholder{
 	padding-left: 10px;
 	font-size: 12px;
+}
+
+.content-item {
+	border-top: 1.25px solid rgba(0,0,0,0);
 }
