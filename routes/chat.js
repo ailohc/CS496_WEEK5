@@ -11,7 +11,7 @@ module.exports = function(io){
         socket.leave('room' + data.roomId);
       });
       socket.on('send:message', function (data) {
-        io.sockets.in('room' + data.roomId).emit('send:message', data.message);
+        io.sockets.in('room' + data.roomId).emit('send:message', {'messages' : data.message, 'user_name': data.user_name});
       });
       socket.on('disconnect', function(){
       })

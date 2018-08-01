@@ -150,6 +150,14 @@ html, body {
 	background-color: white;
 }
 
+.container_add {
+	position:relative;
+	width: 600px;
+	height: 400px;
+	padding: 0;
+	background-color: rgb(249,249,247);
+}
+
 .table-background {
 	position:relative;
 	width: 600px;

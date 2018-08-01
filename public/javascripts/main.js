@@ -152,7 +152,7 @@ function show_freeboard () {
           var comment_date = comment_date_string[0];
           var li = document.createElement("div");
           li.className = "FreeCommentsElement"
-          li.innerHTML = "<span id = 'FreeCommentText' class = 'FreeCommentText'>"+comment_text+"</span> - <span id = 'FreeCommentUser' class = 'FreeCommentUser'>"+comment_user+"</span><span id = 'FreeCommentDate' class = 'FreeCommentDate'>"+comment_date+"</span><button id= 'FreeCommentDelete' class = 'FreeCommentDelete' onclick = 'Delete_free_comments("+comment_id1+");'>삭제</button>";
+          li.innerHTML = "<span id = 'FreeCommentText' class = 'FreeCommentText'>"+comment_text+"</span> - <span id = 'FreeCommentUser' class = 'FreeCommentUser'>"+comment_user+"</span><span id = 'FreeCommentDate' class = 'FreeCommentDate'>"+comment_date+"</span><button id= 'FreeCommentDelete' class = 'FreeCommentDelete' onclick = 'Delete_free_comments("+comment_id1+");'>&#xf00d;</button>";
           document.getElementById("FreeCommentsList").appendChild(li);
         }
       }
@@ -343,7 +343,7 @@ function show_anomboard () {
           var comment_date = comment_date_string[0];
           var li = document.createElement("div");
           li.className = "AnomCommentsElement"
-          li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'check_com_pw(" + comment_id3 + ");'>삭제</button>";
+          li.innerHTML = "<span id = 'AnomCommentText' class = 'AnomCommentText'>"+comment_text+"</span> - <span id = 'AnomCommentUser' class = 'AnomCommentUser'>"+comment_user+"</span><span id = 'AnomCommentDate' class = 'AnomCommentDate'>"+comment_date+"</span><button id= 'AnomCommentDelete' class = 'AnomCommentDelete' onclick = 'check_com_pw(" + comment_id3 + ");'>&#xf00d;</button>";
           document.getElementById("AnomCommentsList").appendChild(li);
         }
       }
@@ -859,7 +859,7 @@ function query_submit() {
   let split_query = query.split(" ");
   if (split_query[0] === "ls") {
     let foldernode = document.createElement("li");
-    let foldertextnode = document.createTextNode("apple-ui-MacBook-Pro:~ "+user_name+"$"+room.join(' '));
+    let foldertextnode = document.createTextNode(room.join(' '));
     console.log(room);
     foldernode.appendChild(foldertextnode);
     document.getElementById("TerminalList").appendChild(foldernode);
@@ -878,7 +878,7 @@ function query_submit() {
         console.log("get chag");
         socket.on('send:message', function (data) {
           let chat_message = document.createElement("li");
-          let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+"cs496"+"$"+data);
+          let chat_message_text = document.createTextNode("apple-ui-MacBook-Pro:"+room_id+" "+data.user_name+"$"+data.messages);
           chat_message.appendChild(chat_message_text);
           document.getElementById("ChatList").appendChild(chat_message);
         });
@@ -933,7 +933,7 @@ function chat_submit() {
       $('#TerminalQuery').focus();
     });
   }
-  socket.emit('send:message', {roomId: room_id, message: chat_query});
+  socket.emit('send:message', {roomId: room_id, message: chat_query, user_name: user_id});
   document.getElementById("ChatQuery").value = "";
 }
 
